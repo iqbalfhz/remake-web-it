@@ -79,8 +79,8 @@
 
                             {{-- Image --}}
                             <div class="relative overflow-hidden h-48 bg-linear-to-br from-blue-900/50 to-cyan-900/30">
-                                @if ($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}"
+                                @if ($article->image_url)
+                                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
@@ -128,13 +128,3 @@
     </section>
 
 @endsection
-
-@push('styles')
-    <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-    </style>
-@endpush

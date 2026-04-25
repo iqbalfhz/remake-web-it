@@ -2,47 +2,6 @@
 
 @section('title', 'IT Tangcity - Teknologi & Informasi Tangcity Superblock')
 
-@push('styles')
-    <style>
-        .hero-gradient {
-            background: radial-gradient(ellipse 80% 80% at 50% -10%, rgba(59, 130, 246, 0.25) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 50% at 80% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-                #030712;
-        }
-
-        .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .glow-blue {
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
-        }
-
-        .glow-cyan {
-            box-shadow: 0 0 40px rgba(6, 182, 212, 0.15);
-        }
-
-        .text-glow {
-            text-shadow: 0 0 40px rgba(96, 165, 250, 0.4);
-        }
-
-        .grid-bg {
-            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 60px 60px;
-        }
-
-        .service-card:hover .service-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .article-card:hover {
-            transform: translateY(-4px);
-        }
-    </style>
-@endpush
 
 @section('content')
 
@@ -111,7 +70,9 @@
         </div>
 
         {{-- Scroll indicator --}}
-        <div
+        <div x-data="{ visible: true }" @scroll.window="visible = window.scrollY < 50" x-show="visible"
+            x-transition:leave="transition duration-300" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
             class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-600 animate-bounce">
             <span class="text-xs uppercase tracking-widest">Scroll</span>
             <i class="fa-solid fa-chevron-down text-xs"></i>
@@ -232,37 +193,127 @@
                 <p class="text-gray-400 mt-4 max-w-xl mx-auto">Akses sistem dan layanan internal Tangcity Superblock</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {{-- Aplikasi --}}
+            <div class="flex flex-wrap justify-center gap-5 mb-8">
 
-                {{-- Asset System --}}
-                <div class="glass-card rounded-2xl p-8 text-center hover:border-blue-500/20 transition-all duration-300 hover:-translate-y-1 group"
-                    data-aos="fade-right">
+                {{-- Asset Tangcity --}}
+                <a href="http://192.168.1.222/login" target="_blank"
+                    class="glass-card rounded-2xl p-6 text-center hover:border-blue-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    data-aos="fade-up" data-aos-delay="0">
                     <div
-                        class="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center mx-auto mb-5 shadow-xl shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
-                        <i class="fa-solid fa-server text-white text-2xl"></i>
+                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
+                        <i class="fa-solid fa-server text-white text-xl"></i>
                     </div>
-                    <h3 class="text-white font-bold text-lg mb-2">Asset Tangcity</h3>
-                    <p class="text-gray-400 text-sm mb-6 leading-relaxed">Sistem manajemen aset IT internal. Monitor dan
-                        kelola seluruh inventaris perangkat perusahaan.</p>
-                    <a href="http://192.168.1.222/login" target="_blank"
-                        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500 transition-colors">
-                        <i class="fa-solid fa-arrow-right-to-bracket"></i>Let's Go
-                    </a>
+                    <h3 class="text-white font-bold text-sm mb-1">Asset Tangcity</h3>
+                    <span
+                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                </a>
+
+                {{-- e-Arsip (Coming Soon) --}}
+                <div class="glass-card rounded-2xl p-6 text-center opacity-60 cursor-not-allowed group w-44"
+                    data-aos="fade-up" data-aos-delay="80">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-orange-600 to-orange-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/30">
+                        <i class="fa-solid fa-folder-open text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-sm mb-1">e-Arsip</h3>
+                    <span
+                        class="inline-block px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
+                        Soon</span>
                 </div>
 
-                {{-- Mailing List --}}
-                <div class="glass-card rounded-2xl p-8 text-center hover:border-cyan-500/20 transition-all duration-300 hover:-translate-y-1 group"
-                    data-aos="fade-left">
+                {{-- Messanger (Coming Soon) --}}
+                <div class="glass-card rounded-2xl p-6 text-center opacity-60 cursor-not-allowed group w-44"
+                    data-aos="fade-up" data-aos-delay="160">
                     <div
-                        class="w-16 h-16 rounded-2xl bg-linear-to-br from-cyan-600 to-cyan-400 flex items-center justify-center mx-auto mb-5 shadow-xl shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-shadow">
-                        <i class="fa-solid fa-envelope-open-text text-white text-2xl"></i>
+                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-pink-600 to-pink-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-500/30">
+                        <i class="fa-solid fa-comment-dots text-white text-xl"></i>
                     </div>
-                    <h3 class="text-white font-bold text-lg mb-2">Mailing List</h3>
-                    <p class="text-gray-400 text-sm mb-6 leading-relaxed">Sudah tau belum kita ada mailing list? Atau ingin
-                        tau email orang yang ada di Tangcity?</p>
-                    <a href="https://www.tangcity.cloud/daftar-email/mailing-list/" target="_blank"
-                        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-cyan-600 text-white text-sm font-semibold hover:bg-cyan-500 transition-colors">
-                        <i class="fa-solid fa-list-ul"></i>Mailing List
+                    <h3 class="text-white font-bold text-sm mb-1">Messanger</h3>
+                    <span
+                        class="inline-block px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
+                        Soon</span>
+                </div>
+
+                {{-- Meeting Room --}}
+                <a href="https://meet.tangcity.com/" target="_blank"
+                    class="glass-card rounded-2xl p-6 text-center hover:border-teal-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    data-aos="fade-up" data-aos-delay="240">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-teal-600 to-teal-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-shadow">
+                        <i class="fa-solid fa-video text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-sm mb-1">Meeting Room</h3>
+                    <span
+                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                </a>
+
+                {{-- Penomoran Dokumen --}}
+                <a href="https://penomoran.tangcity.com/" target="_blank"
+                    class="glass-card rounded-2xl p-6 text-center hover:border-indigo-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    data-aos="fade-up" data-aos-delay="320">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-600 to-indigo-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-shadow">
+                        <i class="fa-solid fa-file-lines text-white text-xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-sm mb-1">Penomoran Dokumen</h3>
+                    <span
+                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                </a>
+            </div>
+
+            {{-- Daftar Email --}}
+            <div class="mt-10">
+                <p class="text-gray-500 text-xs uppercase tracking-widest font-semibold mb-5" data-aos="fade-up">Daftar
+                    Email</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+                    {{-- Mailing List --}}
+                    <a href="{{ route('email.mailing-list') }}"
+                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-cyan-500/20 transition-all duration-300 hover:-translate-y-1 group"
+                        data-aos="fade-up" data-aos-delay="0">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-linear-to-br from-cyan-600 to-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-shadow">
+                            <i class="fa-solid fa-envelope-open-text text-white text-lg"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-white font-semibold text-sm">Mailing List</h3>
+                            <p class="text-gray-500 text-xs mt-0.5">Daftar group email Tangcity</p>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-cyan-400 transition-colors"></i>
+                    </a>
+
+                    {{-- Seluruh Staff --}}
+                    <a href="{{ route('email.seluruh-staff') }}"
+                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-violet-500/20 transition-all duration-300 hover:-translate-y-1 group"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-linear-to-br from-violet-600 to-violet-400 flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow">
+                            <i class="fa-solid fa-users text-white text-lg"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-white font-semibold text-sm">Email Seluruh Staff</h3>
+                            <p class="text-gray-500 text-xs mt-0.5">Direktori karyawan Tangcity</p>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-violet-400 transition-colors"></i>
+                    </a>
+
+                    {{-- Workspace --}}
+                    <a href="{{ route('email.workspace') }}"
+                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-emerald-500/20 transition-all duration-300 hover:-translate-y-1 group"
+                        data-aos="fade-up" data-aos-delay="200">
+                        <div
+                            class="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-600 to-emerald-400 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
+                            <i class="fa-solid fa-building text-white text-lg"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-white font-semibold text-sm">Email Workspace</h3>
+                            <p class="text-gray-500 text-xs mt-0.5">Email per gedung / area Tangcity</p>
+                        </div>
+                        <i
+                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-emerald-400 transition-colors"></i>
                     </a>
                 </div>
             </div>
@@ -301,8 +352,8 @@
 
                             {{-- Image --}}
                             <div class="relative overflow-hidden h-48 bg-linear-to-br from-blue-900/50 to-cyan-900/30">
-                                @if ($article->image)
-                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}"
+                                @if ($article->image_url)
+                                    <img src="{{ $article->image_url }}" alt="{{ $article->title }}"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
