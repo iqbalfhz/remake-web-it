@@ -194,128 +194,174 @@
             </div>
 
             {{-- Aplikasi --}}
-            <div class="flex flex-wrap justify-center gap-5 mb-8">
+            <div class="flex flex-wrap justify-center gap-5 mb-12">
 
                 {{-- Asset Tangcity --}}
                 <a href="http://192.168.1.222/login" target="_blank"
-                    class="glass-card rounded-2xl p-6 text-center hover:border-blue-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    class="glass-card rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-blue-500/20 hover:border-blue-500/30 group w-44 flex flex-col items-center"
                     data-aos="fade-up" data-aos-delay="0">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-500/30 group-hover:shadow-blue-500/50 transition-shadow">
-                        <i class="fa-solid fa-server text-white text-xl"></i>
+                    <div class="relative mb-4">
+                        <div
+                            class="absolute inset-0 rounded-2xl bg-blue-500/20 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <div
+                            class="relative w-16 h-16 rounded-2xl bg-linear-to-br from-blue-600 to-blue-400 flex items-center justify-center shadow-lg shadow-blue-500/40 group-hover:shadow-blue-500/60 transition-shadow">
+                            <i class="fa-solid fa-server text-white text-2xl"></i>
+                        </div>
                     </div>
-                    <h3 class="text-white font-bold text-sm mb-1">Asset Tangcity</h3>
+                    <h3 class="text-white font-bold text-sm mb-2 leading-tight">Asset Tangcity</h3>
                     <span
-                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                        class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Aktif
+                    </span>
                 </a>
 
                 {{-- e-Arsip (Coming Soon) --}}
-                <div class="glass-card rounded-2xl p-6 text-center opacity-60 cursor-not-allowed group w-44"
+                <div class="glass-card rounded-2xl p-6 text-center opacity-50 cursor-not-allowed group w-44 flex flex-col items-center"
                     data-aos="fade-up" data-aos-delay="80">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-orange-600 to-orange-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-orange-500/30">
-                        <i class="fa-solid fa-folder-open text-white text-xl"></i>
+                    <div class="relative mb-4">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-linear-to-br from-orange-600 to-orange-400 flex items-center justify-center shadow-lg shadow-orange-500/30">
+                            <i class="fa-solid fa-folder-open text-white text-2xl"></i>
+                        </div>
                     </div>
-                    <h3 class="text-white font-bold text-sm mb-1">e-Arsip</h3>
+                    <h3 class="text-white font-bold text-sm mb-2 leading-tight">e-Arsip</h3>
                     <span
-                        class="inline-block px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
+                        class="inline-block px-2.5 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
                         Soon</span>
                 </div>
 
                 {{-- Messanger (Coming Soon) --}}
-                <div class="glass-card rounded-2xl p-6 text-center opacity-60 cursor-not-allowed group w-44"
+                <div class="glass-card rounded-2xl p-6 text-center opacity-50 cursor-not-allowed group w-44 flex flex-col items-center"
                     data-aos="fade-up" data-aos-delay="160">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-pink-600 to-pink-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-pink-500/30">
-                        <i class="fa-solid fa-comment-dots text-white text-xl"></i>
+                    <div class="relative mb-4">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-linear-to-br from-pink-600 to-pink-400 flex items-center justify-center shadow-lg shadow-pink-500/30">
+                            <i class="fa-solid fa-comment-dots text-white text-2xl"></i>
+                        </div>
                     </div>
-                    <h3 class="text-white font-bold text-sm mb-1">Messanger</h3>
+                    <h3 class="text-white font-bold text-sm mb-2 leading-tight">Messanger</h3>
                     <span
-                        class="inline-block px-2 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
+                        class="inline-block px-2.5 py-0.5 rounded-full bg-yellow-500/15 text-yellow-400 text-xs font-medium">Coming
                         Soon</span>
                 </div>
 
                 {{-- Meeting Room --}}
                 <a href="https://meet.tangcity.com/" target="_blank"
-                    class="glass-card rounded-2xl p-6 text-center hover:border-teal-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    class="glass-card rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-teal-500/20 hover:border-teal-500/30 group w-44 flex flex-col items-center"
                     data-aos="fade-up" data-aos-delay="240">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-teal-600 to-teal-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-teal-500/30 group-hover:shadow-teal-500/50 transition-shadow">
-                        <i class="fa-solid fa-video text-white text-xl"></i>
+                    <div class="relative mb-4">
+                        <div
+                            class="absolute inset-0 rounded-2xl bg-teal-500/20 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <div
+                            class="relative w-16 h-16 rounded-2xl bg-linear-to-br from-teal-600 to-teal-400 flex items-center justify-center shadow-lg shadow-teal-500/40 group-hover:shadow-teal-500/60 transition-shadow">
+                            <i class="fa-solid fa-video text-white text-2xl"></i>
+                        </div>
                     </div>
-                    <h3 class="text-white font-bold text-sm mb-1">Meeting Room</h3>
+                    <h3 class="text-white font-bold text-sm mb-2 leading-tight">Meeting Room</h3>
                     <span
-                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                        class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Aktif
+                    </span>
                 </a>
 
                 {{-- Penomoran Dokumen --}}
                 <a href="https://penomoran.tangcity.com/" target="_blank"
-                    class="glass-card rounded-2xl p-6 text-center hover:border-indigo-500/20 transition-all duration-300 hover:-translate-y-1 group w-44"
+                    class="glass-card rounded-2xl p-6 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-indigo-500/20 hover:border-indigo-500/30 group w-44 flex flex-col items-center"
                     data-aos="fade-up" data-aos-delay="320">
-                    <div
-                        class="w-14 h-14 rounded-2xl bg-linear-to-br from-indigo-600 to-indigo-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/30 group-hover:shadow-indigo-500/50 transition-shadow">
-                        <i class="fa-solid fa-file-lines text-white text-xl"></i>
+                    <div class="relative mb-4">
+                        <div
+                            class="absolute inset-0 rounded-2xl bg-indigo-500/20 blur-xl scale-110 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        </div>
+                        <div
+                            class="relative w-16 h-16 rounded-2xl bg-linear-to-br from-indigo-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/40 group-hover:shadow-indigo-500/60 transition-shadow">
+                            <i class="fa-solid fa-file-lines text-white text-2xl"></i>
+                        </div>
                     </div>
-                    <h3 class="text-white font-bold text-sm mb-1">Penomoran Dokumen</h3>
+                    <h3 class="text-white font-bold text-sm mb-2 leading-tight">Penomoran</h3>
                     <span
-                        class="inline-block px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">Aktif</span>
+                        class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-green-500/15 text-green-400 text-xs font-medium">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>Aktif
+                    </span>
                 </a>
             </div>
 
-            {{-- Daftar Email --}}
-            <div class="mt-10">
-                <p class="text-gray-500 text-xs uppercase tracking-widest font-semibold mb-5" data-aos="fade-up">Daftar
-                    Email</p>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {{-- Divider Daftar Email --}}
+            <div class="flex items-center gap-4 mb-6" data-aos="fade-up">
+                <div class="flex-1 h-px bg-white/5"></div>
+                <div class="flex items-center gap-2 text-gray-500 text-xs uppercase tracking-widest font-semibold">
+                    <i class="fa-solid fa-envelope text-cyan-500/60 text-xs"></i>
+                    Daftar Email
+                </div>
+                <div class="flex-1 h-px bg-white/5"></div>
+            </div>
 
-                    {{-- Mailing List --}}
-                    <a href="{{ route('email.mailing-list') }}"
-                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-cyan-500/20 transition-all duration-300 hover:-translate-y-1 group"
-                        data-aos="fade-up" data-aos-delay="0">
+            {{-- Daftar Email --}}
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+                {{-- Mailing List --}}
+                <a href="{{ route('email.mailing-list') }}"
+                    class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:border-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/10 transition-all duration-300 hover:-translate-y-1 group"
+                    data-aos="fade-up" data-aos-delay="0">
+                    <div class="relative shrink-0">
                         <div
-                            class="w-12 h-12 rounded-xl bg-linear-to-br from-cyan-600 to-cyan-400 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-shadow">
+                            class="absolute inset-0 rounded-xl bg-cyan-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="relative w-12 h-12 rounded-xl bg-linear-to-br from-cyan-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-cyan-500/30 group-hover:shadow-cyan-500/50 transition-shadow">
                             <i class="fa-solid fa-envelope-open-text text-white text-lg"></i>
                         </div>
-                        <div class="text-left">
-                            <h3 class="text-white font-semibold text-sm">Mailing List</h3>
-                            <p class="text-gray-500 text-xs mt-0.5">Daftar group email Tangcity</p>
-                        </div>
-                        <i
-                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-cyan-400 transition-colors"></i>
-                    </a>
+                    </div>
+                    <div class="text-left min-w-0">
+                        <h3 class="text-white font-semibold text-sm">Mailing List</h3>
+                        <p class="text-gray-500 text-xs mt-0.5 truncate">Daftar group email Tangcity</p>
+                    </div>
+                    <i
+                        class="fa-solid fa-arrow-right text-gray-600 text-xs ml-auto shrink-0 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all"></i>
+                </a>
 
-                    {{-- Seluruh Staff --}}
-                    <a href="{{ route('email.seluruh-staff') }}"
-                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-violet-500/20 transition-all duration-300 hover:-translate-y-1 group"
-                        data-aos="fade-up" data-aos-delay="100">
+                {{-- Seluruh Staff --}}
+                <a href="{{ route('email.seluruh-staff') }}"
+                    class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/10 transition-all duration-300 hover:-translate-y-1 group"
+                    data-aos="fade-up" data-aos-delay="100">
+                    <div class="relative shrink-0">
                         <div
-                            class="w-12 h-12 rounded-xl bg-linear-to-br from-violet-600 to-violet-400 flex items-center justify-center shrink-0 shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow">
+                            class="absolute inset-0 rounded-xl bg-violet-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="relative w-12 h-12 rounded-xl bg-linear-to-br from-violet-600 to-violet-400 flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow">
                             <i class="fa-solid fa-users text-white text-lg"></i>
                         </div>
-                        <div class="text-left">
-                            <h3 class="text-white font-semibold text-sm">Email Seluruh Staff</h3>
-                            <p class="text-gray-500 text-xs mt-0.5">Direktori karyawan Tangcity</p>
-                        </div>
-                        <i
-                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-violet-400 transition-colors"></i>
-                    </a>
+                    </div>
+                    <div class="text-left min-w-0">
+                        <h3 class="text-white font-semibold text-sm">Email Seluruh Staff</h3>
+                        <p class="text-gray-500 text-xs mt-0.5 truncate">Direktori karyawan Tangcity</p>
+                    </div>
+                    <i
+                        class="fa-solid fa-arrow-right text-gray-600 text-xs ml-auto shrink-0 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all"></i>
+                </a>
 
-                    {{-- Workspace --}}
-                    <a href="{{ route('email.workspace') }}"
-                        class="glass-card rounded-2xl p-6 flex items-center gap-4 hover:border-emerald-500/20 transition-all duration-300 hover:-translate-y-1 group"
-                        data-aos="fade-up" data-aos-delay="200">
+                {{-- Workspace --}}
+                <a href="{{ route('email.workspace') }}"
+                    class="glass-card rounded-2xl p-5 flex items-center gap-4 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 hover:-translate-y-1 group"
+                    data-aos="fade-up" data-aos-delay="200">
+                    <div class="relative shrink-0">
                         <div
-                            class="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-600 to-emerald-400 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
+                            class="absolute inset-0 rounded-xl bg-emerald-500/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div
+                            class="relative w-12 h-12 rounded-xl bg-linear-to-br from-emerald-600 to-emerald-400 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:shadow-emerald-500/50 transition-shadow">
                             <i class="fa-solid fa-building text-white text-lg"></i>
                         </div>
-                        <div class="text-left">
-                            <h3 class="text-white font-semibold text-sm">Email Workspace</h3>
-                            <p class="text-gray-500 text-xs mt-0.5">Email per gedung / area Tangcity</p>
-                        </div>
-                        <i
-                            class="fa-solid fa-chevron-right text-gray-600 text-xs ml-auto group-hover:text-emerald-400 transition-colors"></i>
-                    </a>
-                </div>
+                    </div>
+                    <div class="text-left min-w-0">
+                        <h3 class="text-white font-semibold text-sm">Email Workspace</h3>
+                        <p class="text-gray-500 text-xs mt-0.5 truncate">Email per gedung / area Tangcity</p>
+                    </div>
+                    <i
+                        class="fa-solid fa-arrow-right text-gray-600 text-xs ml-auto shrink-0 group-hover:text-emerald-400 group-hover:translate-x-0.5 transition-all"></i>
+                </a>
             </div>
         </div>
     </section>
