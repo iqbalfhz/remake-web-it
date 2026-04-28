@@ -14,7 +14,7 @@ class ContactController extends Controller
         // Capture unread BEFORE marking as read so the notification bell still shows them
         $unreadContacts = Contact::where('is_read', false)->latest()->get();
 
-        $contacts = Contact::latest()->paginate(15);
+        $contacts = Contact::latest()->paginate(5);
 
         Contact::where('is_read', false)->update(['is_read' => true]);
 
