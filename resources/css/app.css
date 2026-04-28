@@ -18,6 +18,10 @@
    ============================================= */
 @variant dark (&:where(.dark, .dark *));
 
+[x-cloak] {
+    display: none !important;
+}
+
 /* =============================================
    SHARED COMPONENT STYLES (dark defaults)
    ============================================= */
