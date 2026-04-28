@@ -3,37 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Article::whereNotNull('published_at')->orderBy('published_at', 'desc');
+        $query = Article::with('categories')->whereNotNull('published_at')->where('published_at', '<=', now())->orderBy('published_at', 'desc');
 
         if ($request->filled('search')) {
-            $query->where('title', 'like', '%'.$request->search.'%')
-                ->orWhere('excerpt', 'like', '%'.$request->search.'%');
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->search.'%')
+                    ->orWhere('excerpt', 'like', '%'.$request->search.'%');
+            });
         }
 
         if ($request->filled('category')) {
-            $query->where('category', $request->category);
+            $query->whereHas('categories', function ($q) use ($request) {
+                $q->where('slug', $request->category);
+            });
         }
 
         $articles = $query->paginate(6)->withQueryString();
-        $categories = Article::whereNotNull('published_at')->distinct()->pluck('category');
+        $categories = Category::orderBy('name')->get();
 
         return view('articles.index', compact('articles', 'categories'));
     }
 
-    public function show(Article $article)
+    public function show(Article $artikel)
     {
-        $related = Article::whereNotNull('published_at')
-            ->where('id', '!=', $article->id)
-            ->where('category', $article->category)
+        abort_if(
+            is_null($artikel->published_at) || $artikel->published_at->isFuture(),
+            404
+        );
+
+        $artikel->load(['categories', 'tags', 'comments', 'user']);
+
+        $related = Article::with('categories')
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', now())
+            ->where('id', '!=', $artikel->id)
+            ->whereHas('categories', function ($q) use ($artikel) {
+                $q->whereIn('categories.id', $artikel->categories->pluck('id'));
+            })
             ->take(3)
             ->get();
 
-        return view('articles.show', compact('article', 'related'));
+        return view('articles.show', compact('artikel', 'related'));
     }
 }

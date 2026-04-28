@@ -88,10 +88,12 @@
                                     </div>
                                 @endif
                                 <div class="absolute top-4 left-4">
-                                    <span
-                                        class="px-3 py-1 rounded-full bg-blue-600/80 backdrop-blur text-white text-xs font-semibold">
-                                        {{ $article->category }}
-                                    </span>
+                                    @if ($article->categories->isNotEmpty())
+                                        <span
+                                            class="px-3 py-1 rounded-full bg-blue-600/80 backdrop-blur text-white text-xs font-semibold">
+                                            {{ $article->categories->first()->name }}
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
 

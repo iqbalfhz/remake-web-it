@@ -38,6 +38,9 @@
                             class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Tanggal</th>
                         <th
+                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Penulis</th>
+                        <th
                             class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Aksi</th>
                     </tr>
@@ -61,13 +64,24 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4">
-                                <span
-                                    class="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 text-xs font-medium rounded-full">
-                                    {{ $article->category }}
-                                </span>
+                                <div class="flex flex-wrap gap-1">
+                                    @forelse ($article->categories as $category)
+                                        <span
+                                            class="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 text-xs font-medium rounded-full">
+                                            {{ $category->name }}
+                                        </span>
+                                    @empty
+                                        <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
+                                    @endforelse
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
                                 {{ $article->published_at?->format('d M Y') ?? '-' }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <span class="text-sm text-gray-700 dark:text-gray-300">
+                                    {{ $article->user?->name ?? '—' }}
+                                </span>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">

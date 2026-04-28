@@ -17,9 +17,10 @@ class UpdateArticleRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'excerpt' => ['required', 'string', 'max:500'],
             'content' => ['required', 'string'],
-            'category' => ['required', 'string', 'max:100'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'published_at' => ['nullable', 'date'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string', 'max:50'],
         ];
     }
 }
