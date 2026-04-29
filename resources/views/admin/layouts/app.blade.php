@@ -208,7 +208,8 @@
                 if (!isset($unreadContacts)) {
                     $unreadContacts = \App\Models\Contact::where('is_read', false)->latest()->get();
                 }
-                $totalNotifications = $pendingUsers->count() + $unreadContacts->count();
+                $unreadComments = \App\Models\Comment::where('is_read', false)->with('article')->latest()->get();
+                $totalNotifications = $pendingUsers->count() + $unreadContacts->count() + $unreadComments->count();
             @endphp
             <header
                 class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
@@ -275,6 +276,36 @@
                                 @endforeach
                             @endif
 
+                            {{-- Unread Comments Section --}}
+                            @if ($unreadComments->isNotEmpty())
+                                <div
+                                    class="px-4 py-2 bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700">
+                                    <p
+                                        class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                        Komentar Baru</p>
+                                </div>
+                                @foreach ($unreadComments as $comment)
+                                    <a href="{{ route('admin.komentar.index') }}" @click="open = false"
+                                        class="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors border-b border-gray-50 dark:border-gray-700/50 last:border-0">
+                                        <div
+                                            class="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center shrink-0 mt-0.5">
+                                            <span class="text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                                                {{ strtoupper(substr($comment->name, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-gray-800 dark:text-white truncate">
+                                                {{ $comment->name }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                                {{ Str::limit($comment->body, 50) }}</p>
+                                            <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-0.5">
+                                                {{ $comment->article?->title ?? 'Artikel' }}
+                                                &middot; {{ $comment->created_at->diffForHumans() }}</p>
+                                        </div>
+                                    </a>
+                                @endforeach
+                            @endif
+
                             {{-- Pending Users Section --}}
                             @if ($pendingUsers->isNotEmpty())
                                 <div
@@ -323,6 +354,12 @@
                                     <a href="{{ route('admin.contacts.index') }}" @click="open = false"
                                         class="flex-1 text-center text-xs font-medium text-cyan-600 dark:text-cyan-400 hover:underline">
                                         Lihat pesan &rarr;
+                                    </a>
+                                @endif
+                                @if ($unreadComments->isNotEmpty())
+                                    <a href="{{ route('admin.komentar.index') }}" @click="open = false"
+                                        class="flex-1 text-center text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline">
+                                        Lihat komentar &rarr;
                                     </a>
                                 @endif
                                 @if ($pendingUsers->isNotEmpty())

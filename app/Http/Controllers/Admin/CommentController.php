@@ -11,6 +11,8 @@ class CommentController extends Controller
 {
     public function index(): View
     {
+        Comment::where('is_read', false)->update(['is_read' => true]);
+
         $comments = Comment::with('article')->latest()->paginate(20);
 
         return view('admin.komentar.index', compact('comments'));

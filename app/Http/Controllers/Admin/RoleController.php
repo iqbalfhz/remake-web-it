@@ -47,7 +47,8 @@ class RoleController extends Controller
             'permissions.*' => ['integer', 'exists:permissions,id'],
         ]);
 
-        $role->syncPermissions($request->input('permissions', []));
+        $permissions = Permission::whereIn('id', $request->input('permissions', []))->get();
+        $role->syncPermissions($permissions);
 
         return redirect()->route('admin.roles.index')->with('success', "Permission role '{$role->name}' berhasil diperbarui.");
     }

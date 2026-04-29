@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Role;
 
@@ -26,6 +28,68 @@ class UserController extends Controller
         $roles = Role::orderBy('name')->get();
 
         return view('admin.users.index', compact('pending', 'approved', 'roles'));
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', Password::defaults()],
+            'role' => ['nullable', 'string', 'exists:roles,name'],
+        ]);
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'is_approved' => true,
+            'is_active' => true,
+        ]);
+
+        if (! empty($data['role'])) {
+            $user->assignRole($data['role']);
+        }
+
+        return back()->with('success', "Akun {$user->name} berhasil dibuat.");
+    }
+
+    public function edit(User $user): View
+    {
+        $roles = Role::orderBy('name')->get();
+
+        return view('admin.users.edit', compact('user', 'roles'));
+    }
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'password' => ['nullable', Password::defaults()],
+            'role' => ['nullable', 'string', 'exists:roles,name'],
+        ]);
+
+        $user->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
+
+        if (! empty($data['password'])) {
+            $user->update(['password' => Hash::make($data['password'])]);
+        }
+
+        $user->syncRoles(! empty($data['role']) ? [$data['role']] : []);
+
+        return redirect()->route('admin.users.index')->with('success', "Akun {$user->name} berhasil diperbarui.");
+    }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        $name = $user->name;
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', "Akun {$name} berhasil dihapus.");
     }
 
     public function approve(User $user): RedirectResponse

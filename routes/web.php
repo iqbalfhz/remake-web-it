@@ -49,6 +49,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('staff-email', AdminStaffEmailController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::get('workspace-email', [AdminStaffEmailController::class, 'workspace'])->name('workspace-email');
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::post('users', [AdminUserController::class, 'store'])->name('users.store');
+    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+    Route::patch('users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+    Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
     Route::patch('users/{user}/approve', [AdminUserController::class, 'approve'])->name('users.approve');
     Route::patch('users/{user}/toggle', [AdminUserController::class, 'toggle'])->name('users.toggle');
     Route::patch('users/{user}/role', [AdminUserController::class, 'assignRole'])->name('users.role');

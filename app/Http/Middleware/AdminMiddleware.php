@@ -21,7 +21,7 @@ class AdminMiddleware
             abort(403);
         }
 
-        if ($user->is_admin || $user->hasAnyRole(['admin', 'super-admin'])) {
+        if ($user->is_admin || $user->roles->isNotEmpty()) {
             return $next($request);
         }
 
