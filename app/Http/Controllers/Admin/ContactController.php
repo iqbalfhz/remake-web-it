@@ -11,6 +11,8 @@ class ContactController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('contacts.view');
+
         // Capture unread BEFORE marking as read so the notification bell still shows them
         $unreadContacts = Contact::where('is_read', false)->latest()->get();
 

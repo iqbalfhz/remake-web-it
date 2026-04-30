@@ -30,147 +30,176 @@
                     Dashboard
                 </a>
 
-                <div class="pt-4 pb-2">
-                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Konten</p>
-                </div>
+                @if (Auth::user()->can('artikel.view') || Auth::user()->can('kategori.view') || Auth::user()->can('komentar.view'))
+                    <div class="pt-4 pb-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Konten</p>
+                    </div>
+                @endif
 
                 {{-- Artikel --}}
-                <a href="{{ route('admin.artikel.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('artikel.view')
+                    <a href="{{ route('admin.artikel.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.artikel.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                    Artikel
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                        </svg>
+                        Artikel
+                    </a>
+                @endcan
 
                 {{-- Kategori --}}
-                <a href="{{ route('admin.kategori.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('kategori.view')
+                    <a href="{{ route('admin.kategori.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.kategori.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                    </svg>
-                    Kategori
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        Kategori
+                    </a>
+                @endcan
 
                 {{-- Komentar --}}
-                <a href="{{ route('admin.komentar.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('komentar.view')
+                    <a href="{{ route('admin.komentar.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.komentar.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-                    </svg>
-                    Komentar
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                        </svg>
+                        Komentar
+                    </a>
+                @endcan
 
-                <div class="pt-4 pb-2">
-                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Komunikasi</p>
-                </div>
+                @if (Auth::user()->can('contacts.view') ||
+                        Auth::user()->can('mailing-list.view') ||
+                        Auth::user()->can('staff-email.view') ||
+                        Auth::user()->can('workspace-email.view'))
+                    <div class="pt-4 pb-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Komunikasi</p>
+                    </div>
+                @endif
 
                 {{-- Pesan Masuk --}}
-                @php $unreadContactsCount = isset($unreadContacts) ? $unreadContacts->count() : \App\Models\Contact::where('is_read', false)->count(); @endphp
-                <a href="{{ route('admin.contacts.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('contacts.view')
+                    @php $unreadContactsCount = isset($unreadContacts) ? $unreadContacts->count() : \App\Models\Contact::where('is_read', false)->count(); @endphp
+                    <a href="{{ route('admin.contacts.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.contacts.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                    Pesan Masuk
-                    @if ($unreadContactsCount > 0)
-                        <span
-                            class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                            {{ $unreadContactsCount }}
-                        </span>
-                    @endif
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Pesan Masuk
+                        @if ($unreadContactsCount > 0)
+                            <span
+                                class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                {{ $unreadContactsCount }}
+                            </span>
+                        @endif
+                    </a>
+                @endcan
 
                 {{-- Mailing List --}}
-                <a href="{{ route('admin.mailing-list.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('mailing-list.view')
+                    <a href="{{ route('admin.mailing-list.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.mailing-list.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Mailing List
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Mailing List
+                    </a>
+                @endcan
 
                 {{-- Email Staff --}}
-                <a href="{{ route('admin.staff-email.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('staff-email.view')
+                    <a href="{{ route('admin.staff-email.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.staff-email.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-                    </svg>
-                    Email Staff
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                        </svg>
+                        Email Staff
+                    </a>
+                @endcan
 
                 {{-- Email Workspace --}}
-                <a href="{{ route('admin.workspace-email') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('workspace-email.view')
+                    <a href="{{ route('admin.workspace-email') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.workspace-email') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                        <path
-                            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                        <path
-                            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                        <path
-                            d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                    </svg>
-                    Email Workspace
-                </a>
+                        <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                        </svg>
+                        Email Workspace
+                    </a>
+                @endcan
 
-                <div class="pt-4 pb-2">
-                    <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sistem</p>
-                </div>
+                @if (Auth::user()->can('users.view') || Auth::user()->can('roles.view') || Auth::user()->can('permissions.view'))
+                    <div class="pt-4 pb-2">
+                        <p class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Sistem</p>
+                    </div>
+                @endif
 
                 {{-- Pengguna --}}
-                <a href="{{ route('admin.users.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('users.view')
+                    <a href="{{ route('admin.users.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.users.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    Pengguna
-                    @php $pendingCount = \App\Models\User::where('is_approved', false)->where('is_admin', false)->count(); @endphp
-                    @if ($pendingCount > 0)
-                        <span
-                            class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                            {{ $pendingCount }}
-                        </span>
-                    @endif
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                        Pengguna
+                        @php $pendingCount = \App\Models\User::where('is_approved', false)->where('is_admin', false)->count(); @endphp
+                        @if ($pendingCount > 0)
+                            <span
+                                class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                                {{ $pendingCount }}
+                            </span>
+                        @endif
+                    </a>
+                @endcan
 
                 {{-- Roles --}}
-                <a href="{{ route('admin.roles.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('roles.view')
+                    <a href="{{ route('admin.roles.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.roles.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    Role
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        Role
+                    </a>
+                @endcan
 
                 {{-- Permissions --}}
-                <a href="{{ route('admin.permissions.index') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                @can('permissions.view')
+                    <a href="{{ route('admin.permissions.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
                           {{ request()->routeIs('admin.permissions.*') ? 'bg-cyan-600 text-white' : 'text-gray-300 hover:bg-white/10 hover:text-white' }}">
-                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-                    </svg>
-                    Permission
-                </a>
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                        Permission
+                    </a>
+                @endcan
             </nav>
             <div class="px-4 py-4 border-t border-white/10">
                 <div class="flex items-center gap-3 px-3 py-2">

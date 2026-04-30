@@ -33,4 +33,30 @@ class User extends Authenticatable
             'is_active' => 'boolean',
         ];
     }
+
+    /**
+     * Tier hirarki admin panel.
+     * Semakin kecil angkanya, semakin tinggi kewenangannya.
+     * 1 = super-admin, 2 = admin, 3 = editor, 4 = staff, 99 = no role
+     */
+    public function adminTier(): int
+    {
+        if ($this->is_admin || $this->hasRole('super-admin')) {
+            return 1;
+        }
+
+        if ($this->hasRole('admin')) {
+            return 2;
+        }
+
+        if ($this->hasRole('editor')) {
+            return 3;
+        }
+
+        if ($this->hasRole('staff')) {
+            return 4;
+        }
+
+        return 99;
+    }
 }

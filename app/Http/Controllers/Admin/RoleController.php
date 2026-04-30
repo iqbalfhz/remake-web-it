@@ -13,6 +13,8 @@ class RoleController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('roles.view');
+
         $roles = Role::withCount('permissions', 'users')->orderBy('id')->get();
 
         return view('admin.roles.index', compact('roles'));
@@ -20,6 +22,8 @@ class RoleController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('roles.manage');
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:roles,name'],
         ]);
@@ -31,6 +35,8 @@ class RoleController extends Controller
 
     public function edit(Role $role): View
     {
+        $this->authorize('roles.manage');
+
         $permissions = Permission::orderBy('name')->get()->groupBy(function ($permission) {
             return explode('.', $permission->name)[0];
         });
@@ -42,6 +48,8 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role): RedirectResponse
     {
+        $this->authorize('roles.manage');
+
         $request->validate([
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['integer', 'exists:permissions,id'],
@@ -55,6 +63,8 @@ class RoleController extends Controller
 
     public function destroy(Role $role): RedirectResponse
     {
+        $this->authorize('roles.manage');
+
         $name = $role->name;
         $role->delete();
 

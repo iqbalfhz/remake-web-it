@@ -11,6 +11,8 @@ class CommentController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('komentar.view');
+
         Comment::where('is_read', false)->update(['is_read' => true]);
 
         $comments = Comment::with('article')->latest()->paginate(20);
@@ -20,6 +22,8 @@ class CommentController extends Controller
 
     public function destroy(Comment $komentar): RedirectResponse
     {
+        $this->authorize('komentar.delete');
+
         $komentar->delete();
 
         return redirect()->route('admin.komentar.index')

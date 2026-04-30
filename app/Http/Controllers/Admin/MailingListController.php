@@ -13,6 +13,8 @@ class MailingListController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('mailing-list.view');
+
         $mailingLists = MailingList::orderBy('department')->paginate(20);
 
         return view('admin.mailing-list.index', compact('mailingLists'));
@@ -20,11 +22,15 @@ class MailingListController extends Controller
 
     public function create(): View
     {
+        $this->authorize('mailing-list.create');
+
         return view('admin.mailing-list.create');
     }
 
     public function store(StoreMailingListRequest $request): RedirectResponse
     {
+        $this->authorize('mailing-list.create');
+
         MailingList::create($request->validated());
 
         return redirect()->route('admin.mailing-list.index')
@@ -33,11 +39,15 @@ class MailingListController extends Controller
 
     public function edit(MailingList $mailingList): View
     {
+        $this->authorize('mailing-list.edit');
+
         return view('admin.mailing-list.edit', compact('mailingList'));
     }
 
     public function update(UpdateMailingListRequest $request, MailingList $mailingList): RedirectResponse
     {
+        $this->authorize('mailing-list.edit');
+
         $mailingList->update($request->validated());
 
         return redirect()->route('admin.mailing-list.index')

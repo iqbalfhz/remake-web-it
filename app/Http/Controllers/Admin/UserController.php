@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -15,6 +16,8 @@ class UserController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('users.view');
+
         $pending = User::where('is_approved', false)
             ->where('is_admin', false)
             ->latest()
@@ -109,6 +112,12 @@ class UserController extends Controller
 
     public function toggle(User $user): RedirectResponse
     {
+        $actor = Auth::user();
+
+        if ($actor->adminTier() >= $user->adminTier()) {
+            abort(403, 'Anda tidak memiliki izin untuk mengubah status pengguna ini.');
+        }
+
         $user->update(['is_active' => ! $user->is_active]);
 
         $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';

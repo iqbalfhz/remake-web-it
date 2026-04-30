@@ -13,6 +13,8 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('kategori.view');
+
         $categories = Category::withCount('articles')->latest()->paginate(20);
 
         return view('admin.kategori.index', compact('categories'));
@@ -20,6 +22,7 @@ class CategoryController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('kategori.create');
         $data = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:categories,name'],
         ]);
@@ -34,6 +37,8 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $kategori): RedirectResponse
     {
+        $this->authorize('kategori.edit');
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:100', 'unique:categories,name,'.$kategori->id],
         ]);
@@ -48,6 +53,8 @@ class CategoryController extends Controller
 
     public function destroy(Category $kategori): RedirectResponse
     {
+        $this->authorize('kategori.delete');
+
         $kategori->delete();
 
         return redirect()->route('admin.kategori.index')

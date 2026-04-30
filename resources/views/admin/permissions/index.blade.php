@@ -46,13 +46,15 @@
                     <h2 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Permission</h2>
                     <p class="text-xs text-gray-400 mt-0.5">Dikelompokkan berdasarkan modul.</p>
                 </div>
-                <button @click="open = true"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                    </svg>
-                    Tambah Permission
-                </button>
+                @can('permissions.manage')
+                    <button @click="open = true"
+                        class="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Permission
+                    </button>
+                @endcan
             </div>
 
             <div class="px-6 py-5 space-y-6">
@@ -68,21 +70,23 @@
                                 <div
                                     class="flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 group">
                                     <span class="text-sm text-gray-700 dark:text-gray-300">{{ $permission->name }}</span>
-                                    <form method="POST" action="{{ route('admin.permissions.destroy', $permission) }}"
-                                        x-data
-                                        @submit.prevent="$dispatch('open-confirm', {title: 'Hapus Permission', message: $el.dataset.msg, form: $el, type: 'danger'})"
-                                        data-msg="Yakin hapus &quot;{{ $permission->name }}&quot;? Role yang menggunakan permission ini akan terpengaruh.">
-                                        @csrf @method('DELETE')
-                                        <button type="submit"
-                                            class="p-0.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-                                            title="Hapus">
-                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                                stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </form>
+                                    @can('permissions.manage')
+                                        <form method="POST" action="{{ route('admin.permissions.destroy', $permission) }}"
+                                            x-data
+                                            @submit.prevent="$dispatch('open-confirm', {title: 'Hapus Permission', message: $el.dataset.msg, form: $el, type: 'danger'})"
+                                            data-msg="Yakin hapus &quot;{{ $permission->name }}&quot;? Role yang menggunakan permission ini akan terpengaruh.">
+                                            @csrf @method('DELETE')
+                                            <button type="submit"
+                                                class="p-0.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                                                title="Hapus">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @endcan
                                 </div>
                             @endforeach
                         </div>
@@ -92,32 +96,51 @@
                 @endforelse
             </div>
 
-            {{-- Modal Create Permission --}}
-            <div x-show="open" x-cloak class="border-t border-gray-200 dark:border-gray-700 px-6 py-5">
-                <h3 class="text-sm font-semibold text-gray-800 dark:text-white mb-1">Tambah Permission Baru</h3>
-                <p class="text-xs text-gray-400 mb-4">Format: <code
-                        class="bg-gray-100 dark:bg-gray-700 px-1 rounded">modul.aksi</code> — contoh:
-                    <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">artikel.view</code>
-                </p>
-                <form method="POST" action="{{ route('admin.permissions.store') }}" class="flex items-start gap-3">
-                    @csrf
-                    <div class="flex-1">
-                        <input type="text" name="name" value="{{ old('name') }}" placeholder="contoh: laporan.view"
-                            class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('name') border-red-400 @enderror">
-                        @error('name')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
+            {{-- Modal Tambah Permission --}}
+            <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                @keydown.escape.window="open = false">
+                <div class="absolute inset-0 bg-black/50" @click="open = false"></div>
+                <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Tambah Permission Baru</h3>
+                        <button @click="open = false"
+                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
-                    <button type="submit"
-                        class="px-4 py-2 text-sm font-semibold text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors whitespace-nowrap">
-                        Simpan
-                    </button>
-                    <button type="button" @click="open = false"
-                        class="px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
-                        Batal
-                    </button>
-                </form>
+                    <form method="POST" action="{{ route('admin.permissions.store') }}" class="p-6 space-y-4">
+                        @csrf
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama Permission
+                                <span class="text-red-500">*</span></label>
+                            <p class="text-xs text-gray-400 mb-2">Format: <code
+                                    class="bg-gray-100 dark:bg-gray-700 px-1 rounded">modul.aksi</code> — contoh:
+                                <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">artikel.view</code>
+                            </p>
+                            <input type="text" name="name" value="{{ old('name') }}"
+                                placeholder="contoh: laporan.view"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('name') border-red-500 @enderror">
+                            @error('name')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="flex items-center gap-3 pt-2">
+                            <button type="submit"
+                                class="px-5 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors">
+                                Simpan
+                            </button>
+                            <button type="button" @click="open = false"
+                                class="px-5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                Batal
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+
         </div>
 
     </div>

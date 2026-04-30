@@ -37,7 +37,7 @@
         </div>
     @endif
 
-    <div class="space-y-6">
+    <div class="space-y-6" x-data="{ open: {{ $errors->hasAny(['name', 'email', 'password', 'role']) ? 'true' : 'false' }} }">
 
 
         {{-- Pending Approval --}}
@@ -108,8 +108,17 @@
         </div>
 
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h2 class="text-base font-semibold text-gray-800 dark:text-white">Pengguna Aktif</h2>
+                @can('users.create')
+                    <button @click="open = true"
+                        class="inline-flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Tambah Pengguna
+                    </button>
+                @endcan
             </div>
 
             <div class="overflow-x-auto">
@@ -177,39 +186,32 @@
                                 <td class="px-6 py-3 text-gray-400 text-xs">{{ $user->created_at->format('d M Y') }}</td>
                                 <td class="px-6 py-3 text-right">
                                     <div class="flex items-center justify-end gap-2">
-                                        {{-- Assign Role --}}
-                                        <form method="POST" action="{{ route('admin.users.role', $user) }}" x-data
-                                            @submit.prevent="$dispatch('open-confirm', {title: 'Ganti Role', message: $el.dataset.msg, form: $el, type: 'warning'})"
-                                            data-msg="Ubah role pengguna {{ $user->name }}?"
-                                            class="flex items-center gap-1.5">
-                                            @csrf @method('PATCH')
-                                            <select name="role"
-                                                class="text-xs px-2 py-1.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                                                <option value="">— Tanpa Role —</option>
-                                                @foreach ($roles as $role)
-                                                    <option value="{{ $role->name }}"
-                                                        {{ $user->hasRole($role->name) ? 'selected' : '' }}>
-                                                        {{ $role->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <button type="submit"
-                                                class="px-2.5 py-1.5 text-xs font-semibold text-white bg-cyan-600 hover:bg-cyan-700 rounded-lg transition-colors whitespace-nowrap">
-                                                Simpan
-                                            </button>
-                                        </form>
+                                        {{-- Edit --}}
+                                        @if (Auth::user()->is_admin)
+                                            <a href="{{ route('admin.users.edit', $user) }}"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-900/30 hover:bg-cyan-100 dark:hover:bg-cyan-900/50 rounded-lg transition-colors">
+                                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                </svg>
+                                                Edit
+                                            </a>
+                                        @endif
                                         {{-- Toggle aktif --}}
-                                        <form method="POST" action="{{ route('admin.users.toggle', $user) }}" x-data
-                                            @submit.prevent="$dispatch('open-confirm', {title: $el.dataset.title, message: $el.dataset.msg, form: $el, type: $el.dataset.type})"
-                                            data-title="{{ $user->is_active ? 'Nonaktifkan Akun' : 'Aktifkan Akun' }}"
-                                            data-msg="{{ $user->is_active ? 'Nonaktifkan akun ' . $user->name . '? Pengguna tidak akan bisa login.' : 'Aktifkan kembali akun ' . $user->name . '? Pengguna akan dapat login kembali.' }}"
-                                            data-type="{{ $user->is_active ? 'danger' : 'success' }}">
-                                            @csrf @method('PATCH')
-                                            <button type="submit"
-                                                class="{{ $user->is_active ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50' : 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50' }} px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors">
-                                                {{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
-                                            </button>
-                                        </form>
+                                        @if (Auth::user()->adminTier() < $user->adminTier())
+                                            <form method="POST" action="{{ route('admin.users.toggle', $user) }}" x-data
+                                                @submit.prevent="$dispatch('open-confirm', {title: $el.dataset.title, message: $el.dataset.msg, form: $el, type: $el.dataset.type})"
+                                                data-title="{{ $user->is_active ? 'Nonaktifkan Akun' : 'Aktifkan Akun' }}"
+                                                data-msg="{{ $user->is_active ? 'Nonaktifkan akun ' . $user->name . '? Pengguna tidak akan bisa login.' : 'Aktifkan kembali akun ' . $user->name . '? Pengguna akan dapat login kembali.' }}"
+                                                data-type="{{ $user->is_active ? 'danger' : 'success' }}">
+                                                @csrf @method('PATCH')
+                                                <button type="submit"
+                                                    class="{{ $user->is_active ? 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50' : 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 hover:bg-green-100 dark:hover:bg-green-900/50' }} px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors">
+                                                    {{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
@@ -229,6 +231,84 @@
                     {{ $approved->links() }}
                 </div>
             @endif
+        </div>
+
+        {{-- Modal Tambah Pengguna --}}
+        <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
+            @keydown.escape.window="open = false">
+            <div class="absolute inset-0 bg-black/50" @click="open = false"></div>
+            <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Tambah Pengguna</h3>
+                    <button @click="open = false"
+                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <form method="POST" action="{{ route('admin.users.store') }}" class="p-6 space-y-4">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="name" value="{{ old('name') }}"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('name') border-red-500 @enderror">
+                            @error('name')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email <span
+                                    class="text-red-500">*</span></label>
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('email') border-red-500 @enderror">
+                            @error('email')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password <span
+                                    class="text-red-500">*</span></label>
+                            <input type="password" name="password"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('password') border-red-500 @enderror">
+                            @error('password')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Role</label>
+                            <select name="role"
+                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('role') border-red-500 @enderror">
+                                <option value="">Tanpa role</option>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role->name }}"
+                                        {{ old('role') === $role->name ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 pt-2">
+                        <button type="submit"
+                            class="px-5 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors">
+                            Simpan
+                        </button>
+                        <button type="button" @click="open = false"
+                            class="px-5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                            Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
     </div>

@@ -136,8 +136,11 @@
                     @empty
                         <tr>
                             <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-400">
-                                Belum ada artikel. <a href="{{ route('admin.artikel.create') }}"
-                                    class="text-cyan-500 hover:underline">Tambah sekarang</a>
+                                Belum ada artikel.
+                                @can('artikel.create')
+                                    <a href="{{ route('admin.artikel.create') }}" class="text-cyan-500 hover:underline">Tambah
+                                        sekarang</a>
+                                @endcan
                             </td>
                         </tr>
                     @endforelse

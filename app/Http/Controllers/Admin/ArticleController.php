@@ -18,6 +18,8 @@ class ArticleController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('artikel.view');
+
         $articles = Article::withCount('comments')->with('categories', 'tags', 'user')->latest()->paginate(15);
 
         return view('admin.artikel.index', compact('articles'));
@@ -25,6 +27,8 @@ class ArticleController extends Controller
 
     public function create(): View
     {
+        $this->authorize('artikel.create');
+
         $categories = Category::orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
 
@@ -33,6 +37,7 @@ class ArticleController extends Controller
 
     public function store(StoreArticleRequest $request): RedirectResponse
     {
+        $this->authorize('artikel.create');
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug(Str::slug($data['title']));
         $data['user_id'] = $request->user()->id;
@@ -51,6 +56,8 @@ class ArticleController extends Controller
 
     public function edit(Article $artikel): View
     {
+        $this->authorize('artikel.edit');
+
         $categories = Category::orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
         $artikel->load('categories', 'tags');
@@ -60,6 +67,7 @@ class ArticleController extends Controller
 
     public function update(UpdateArticleRequest $request, Article $artikel): RedirectResponse
     {
+        $this->authorize('artikel.edit');
         $data = $request->validated();
 
         if (isset($data['title'])) {

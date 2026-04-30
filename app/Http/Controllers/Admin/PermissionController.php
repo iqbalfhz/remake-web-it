@@ -12,6 +12,8 @@ class PermissionController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('permissions.view');
+
         $permissions = Permission::orderBy('name')->get()->groupBy(function ($permission) {
             return explode('.', $permission->name)[0];
         });
@@ -21,6 +23,8 @@ class PermissionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('permissions.manage');
+
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'regex:/^[a-z0-9\-]+\.[a-z]+$/', 'unique:permissions,name'],
         ], [
@@ -34,6 +38,8 @@ class PermissionController extends Controller
 
     public function destroy(Permission $permission): RedirectResponse
     {
+        $this->authorize('permissions.manage');
+
         $name = $permission->name;
         $permission->delete();
 
