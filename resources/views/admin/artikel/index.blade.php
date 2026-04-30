@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Artikel')
 
@@ -10,7 +10,7 @@
             x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4"
             style="position:fixed;top:24px;right:24px;z-index:250;max-width:360px;width:100%;"
-            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200 dark:bg-gray-800 dark:border-red-700' : 'bg-white border-emerald-200 dark:bg-gray-800 dark:border-emerald-700' }}">
+            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200' : 'bg-white border-emerald-200' }}">
             <span
                 class="absolute left-0 top-0 bottom-0 w-1 {{ session('error') ? 'bg-red-500' : 'bg-emerald-500' }}"></span>
             @if (session('error'))
@@ -25,7 +25,7 @@
                 </svg>
             @endif
             <p
-                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300' }}">
+                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700' : 'text-emerald-700' }}">
                 {{ session('error') ?? session('success') }}
             </p>
             <button @click="show = false"
@@ -37,9 +37,9 @@
         </div>
     @endif
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Artikel</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 class="text-base font-semibold text-slate-800">Daftar Artikel</h2>
             @can('artikel.create')
                 <a href="{{ route('admin.artikel.create') }}"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors">
@@ -54,40 +54,40 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <thead class="bg-slate-50">
                     <tr>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Judul</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Kategori</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Tanggal</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Penulis</th>
                         <th
-                            class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="divide-y divide-slate-200">
                     @forelse ($articles as $article)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                        <tr class="hover:bg-slate-50 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
                                     @if ($article->image)
                                         <img src="{{ $article->image_url }}" alt=""
                                             class="w-10 h-10 rounded-lg object-cover shrink-0">
                                     @else
-                                        <div class="w-10 h-10 rounded-lg bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                                        <div class="w-10 h-10 rounded-lg bg-slate-200 shrink-0"></div>
                                     @endif
                                     <div>
-                                        <div class="font-medium text-gray-800 dark:text-white line-clamp-1">
+                                        <div class="font-medium text-slate-800 line-clamp-1">
                                             {{ $article->title }}</div>
-                                        <div class="text-xs text-gray-400 mt-0.5 line-clamp-1">{{ $article->excerpt }}</div>
+                                        <div class="text-xs text-slate-400 mt-0.5 line-clamp-1">{{ $article->excerpt }}</div>
                                     </div>
                                 </div>
                             </td>
@@ -95,27 +95,27 @@
                                 <div class="flex flex-wrap gap-1">
                                     @forelse ($article->categories as $category)
                                         <span
-                                            class="px-2 py-1 bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-400 text-xs font-medium rounded-full">
+                                            class="px-2 py-1 bg-cyan-100 text-cyan-700 text-xs font-medium rounded-full">
                                             {{ $category->name }}
                                         </span>
                                     @empty
-                                        <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
+                                        <span class="text-xs text-slate-400">â€”</span>
                                     @endforelse
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-gray-500 dark:text-gray-400">
+                            <td class="px-6 py-4 text-slate-500">
                                 {{ $article->published_at?->format('d M Y') ?? '-' }}
                             </td>
                             <td class="px-6 py-4">
-                                <span class="text-sm text-gray-700 dark:text-gray-300">
-                                    {{ $article->user?->name ?? '—' }}
+                                <span class="text-sm text-slate-700">
+                                    {{ $article->user?->name ?? 'â€”' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     @can('artikel.edit')
                                         <a href="{{ route('admin.artikel.edit', $article) }}"
-                                            class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                            class="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                                             Edit
                                         </a>
                                     @endcan
@@ -125,7 +125,7 @@
                                             data-msg="Yakin hapus artikel &quot;{{ $article->title }}&quot;? Tindakan ini tidak dapat dibatalkan.">
                                             @csrf @method('DELETE')
                                             <button type="submit"
-                                                class="px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors">
+                                                class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
                                                 Hapus
                                             </button>
                                         </form>
@@ -135,7 +135,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-400">
+                            <td colspan="4" class="px-6 py-12 text-center text-sm text-slate-400">
                                 Belum ada artikel.
                                 @can('artikel.create')
                                     <a href="{{ route('admin.artikel.create') }}" class="text-cyan-500 hover:underline">Tambah
@@ -149,7 +149,7 @@
         </div>
 
         @if ($articles->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-t border-slate-200">
                 {{ $articles->links() }}
             </div>
         @endif

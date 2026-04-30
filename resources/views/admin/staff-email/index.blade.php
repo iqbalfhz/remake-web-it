@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Email Staff')
 
@@ -10,7 +10,7 @@
             x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4"
             style="position:fixed;top:24px;right:24px;z-index:250;max-width:360px;width:100%;"
-            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200 dark:bg-gray-800 dark:border-red-700' : 'bg-white border-emerald-200 dark:bg-gray-800 dark:border-emerald-700' }}">
+            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200' : 'bg-white border-emerald-200' }}">
             <span
                 class="absolute left-0 top-0 bottom-0 w-1 {{ session('error') ? 'bg-red-500' : 'bg-emerald-500' }}"></span>
             @if (session('error'))
@@ -25,7 +25,7 @@
                 </svg>
             @endif
             <p
-                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300' }}">
+                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700' : 'text-emerald-700' }}">
                 {{ session('error') ?? session('success') }}
             </p>
             <button @click="show = false"
@@ -38,9 +38,9 @@
     @endif
 
     <div x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }"
-        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-base font-semibold text-gray-800 dark:text-white">Email Staff</h2>
+        class="bg-white rounded-xl shadow-sm border border-slate-200">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 class="text-base font-semibold text-slate-800">Email Staff</h2>
             @can('staff-email.create')
                 <button @click="open = true"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-medium rounded-lg transition-colors">
@@ -55,50 +55,50 @@
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <thead class="bg-slate-50">
                     <tr>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Nama</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             PT / Departemen</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Email</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Email Workspace</th>
                         <th
-                            class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="divide-y divide-slate-200">
                     @forelse ($staffEmails as $staff)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="px-6 py-3 font-medium text-gray-800 dark:text-white">{{ $staff->nama }}</td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-3 font-medium text-slate-800">{{ $staff->nama }}</td>
+                            <td class="px-6 py-3 text-slate-600">
                                 <div>{{ $staff->pt }}</div>
-                                <div class="text-xs text-gray-400">{{ $staff->departemen }}</div>
+                                <div class="text-xs text-slate-400">{{ $staff->departemen }}</div>
                             </td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">
+                            <td class="px-6 py-3 text-slate-600">
                                 <a href="mailto:{{ $staff->email }}"
-                                    class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">{{ $staff->email }}</a>
+                                    class="hover:text-cyan-600 transition-colors">{{ $staff->email }}</a>
                             </td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">
+                            <td class="px-6 py-3 text-slate-600">
                                 @if ($staff->email_workspace)
                                     <a href="mailto:{{ $staff->email_workspace }}"
-                                        class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">{{ $staff->email_workspace }}</a>
+                                        class="hover:text-cyan-600 transition-colors">{{ $staff->email_workspace }}</a>
                                 @else
-                                    <span class="text-gray-400">-</span>
+                                    <span class="text-slate-400">-</span>
                                 @endif
                             </td>
                             <td class="px-6 py-3 text-right">
                                 <div class="flex items-center justify-end gap-2">
                                     @can('staff-email.edit')
                                         <a href="{{ route('admin.staff-email.edit', $staff) }}"
-                                            class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                            class="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                                             Edit
                                         </a>
                                     @endcan
@@ -108,7 +108,7 @@
                                             data-msg="Yakin hapus data staff {{ $staff->nama }}? Tindakan ini tidak dapat dibatalkan.">
                                             @csrf @method('DELETE')
                                             <button type="submit"
-                                                class="px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors">
+                                                class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
                                                 Hapus
                                             </button>
                                         </form>
@@ -118,7 +118,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-sm text-gray-400">
+                            <td colspan="5" class="px-6 py-12 text-center text-sm text-slate-400">
                                 Belum ada data email staff.
                             </td>
                         </tr>
@@ -128,7 +128,7 @@
         </div>
 
         @if ($staffEmails->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-t border-slate-200">
                 {{ $staffEmails->links() }}
             </div>
         @endif
@@ -137,11 +137,11 @@
         <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
             @keydown.escape.window="open = false">
             <div class="absolute inset-0 bg-black/50" @click="open = false"></div>
-            <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-lg">
-                <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Tambah Email Staff</h3>
+            <div class="relative bg-white rounded-xl shadow-xl w-full max-w-lg">
+                <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                    <h3 class="text-sm font-semibold text-slate-800">Tambah Email Staff</h3>
                     <button @click="open = false"
-                        class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                        class="text-slate-400 hover:text-slate-600 transition-colors">
                         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12" />
@@ -152,48 +152,48 @@
                     @csrf
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama <span
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Nama <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="nama" value="{{ old('nama') }}"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('nama') border-red-500 @enderror">
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('nama') border-red-500 @enderror">
                             @error('nama')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">PT <span
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">PT <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="pt" value="{{ old('pt') }}"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('pt') border-red-500 @enderror">
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('pt') border-red-500 @enderror">
                             @error('pt')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Departemen <span
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Departemen <span
                                 class="text-red-500">*</span></label>
                         <input type="text" name="departemen" value="{{ old('departemen') }}"
-                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('departemen') border-red-500 @enderror">
+                            class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('departemen') border-red-500 @enderror">
                         @error('departemen')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email <span
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Email <span
                                     class="text-red-500">*</span></label>
                             <input type="email" name="email" value="{{ old('email') }}"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('email') border-red-500 @enderror">
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('email') border-red-500 @enderror">
                             @error('email')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Email
                                 Workspace</label>
                             <input type="email" name="email_workspace" value="{{ old('email_workspace') }}"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('email_workspace') border-red-500 @enderror">
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('email_workspace') border-red-500 @enderror">
                             @error('email_workspace')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
@@ -205,7 +205,7 @@
                             Simpan
                         </button>
                         <button type="button" @click="open = false"
-                            class="px-5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                            class="px-5 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                             Batal
                         </button>
                     </div>

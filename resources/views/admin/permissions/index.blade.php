@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Manajemen Permission')
 
@@ -10,7 +10,7 @@
             x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4"
             style="position:fixed;top:24px;right:24px;z-index:250;max-width:360px;width:100%;"
-            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200 dark:bg-gray-800 dark:border-red-700' : 'bg-white border-emerald-200 dark:bg-gray-800 dark:border-emerald-700' }}">
+            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200' : 'bg-white border-emerald-200' }}">
             <span
                 class="absolute left-0 top-0 bottom-0 w-1 {{ session('error') ? 'bg-red-500' : 'bg-emerald-500' }}"></span>
             @if (session('error'))
@@ -25,7 +25,7 @@
                 </svg>
             @endif
             <p
-                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300' }}">
+                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700' : 'text-emerald-700' }}">
                 {{ session('error') ?? session('success') }}
             </p>
             <button @click="show = false"
@@ -40,11 +40,11 @@
     <div class="space-y-6" x-data="{ open: {{ $errors->any() ? 'true' : 'false' }} }">
 
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
                 <div>
-                    <h2 class="text-base font-semibold text-gray-800 dark:text-white">Daftar Permission</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Dikelompokkan berdasarkan modul.</p>
+                    <h2 class="text-base font-semibold text-slate-800">Daftar Permission</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Dikelompokkan berdasarkan modul.</p>
                 </div>
                 @can('permissions.manage')
                     <button @click="open = true"
@@ -61,15 +61,15 @@
                 @forelse ($permissions as $module => $modulePermissions)
                     <div>
                         <h3
-                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 pb-2 border-b border-slate-100">
                             {{ $module }}
-                            <span class="normal-case font-normal text-gray-400">({{ $modulePermissions->count() }})</span>
+                            <span class="normal-case font-normal text-slate-400">({{ $modulePermissions->count() }})</span>
                         </h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach ($modulePermissions as $permission)
                                 <div
-                                    class="flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-700 group">
-                                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ $permission->name }}</span>
+                                    class="flex items-center gap-2 pl-3 pr-1.5 py-1.5 rounded-lg bg-slate-100 group">
+                                    <span class="text-sm text-slate-700">{{ $permission->name }}</span>
                                     @can('permissions.manage')
                                         <form method="POST" action="{{ route('admin.permissions.destroy', $permission) }}"
                                             x-data
@@ -77,7 +77,7 @@
                                             data-msg="Yakin hapus &quot;{{ $permission->name }}&quot;? Role yang menggunakan permission ini akan terpengaruh.">
                                             @csrf @method('DELETE')
                                             <button type="submit"
-                                                class="p-0.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                                                class="p-0.5 rounded text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
                                                 title="Hapus">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
@@ -92,7 +92,7 @@
                         </div>
                     </div>
                 @empty
-                    <p class="text-center text-sm text-gray-400 py-8">Belum ada permission.</p>
+                    <p class="text-center text-sm text-slate-400 py-8">Belum ada permission.</p>
                 @endforelse
             </div>
 
@@ -100,11 +100,11 @@
             <div x-show="open" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4"
                 @keydown.escape.window="open = false">
                 <div class="absolute inset-0 bg-black/50" @click="open = false"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md">
-                    <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                        <h3 class="text-sm font-semibold text-gray-800 dark:text-white">Tambah Permission Baru</h3>
+                <div class="relative bg-white rounded-xl shadow-xl w-full max-w-md">
+                    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                        <h3 class="text-sm font-semibold text-slate-800">Tambah Permission Baru</h3>
                         <button @click="open = false"
-                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            class="text-slate-400 hover:text-slate-600 transition-colors">
                             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M6 18L18 6M6 6l12 12" />
@@ -114,15 +114,15 @@
                     <form method="POST" action="{{ route('admin.permissions.store') }}" class="p-6 space-y-4">
                         @csrf
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Nama Permission
+                            <label class="block text-sm font-medium text-slate-700 mb-1.5">Nama Permission
                                 <span class="text-red-500">*</span></label>
-                            <p class="text-xs text-gray-400 mb-2">Format: <code
-                                    class="bg-gray-100 dark:bg-gray-700 px-1 rounded">modul.aksi</code> — contoh:
-                                <code class="bg-gray-100 dark:bg-gray-700 px-1 rounded">artikel.view</code>
+                            <p class="text-xs text-slate-400 mb-2">Format: <code
+                                    class="bg-slate-100 px-1 rounded">modul.aksi</code> â€” contoh:
+                                <code class="bg-slate-100 px-1 rounded">artikel.view</code>
                             </p>
                             <input type="text" name="name" value="{{ old('name') }}"
                                 placeholder="contoh: laporan.view"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('name') border-red-500 @enderror">
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('name') border-red-500 @enderror">
                             @error('name')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
@@ -133,7 +133,7 @@
                                 Simpan
                             </button>
                             <button type="button" @click="open = false"
-                                class="px-5 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                class="px-5 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                                 Batal
                             </button>
                         </div>

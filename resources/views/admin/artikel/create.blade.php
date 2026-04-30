@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Tambah Artikel')
 
@@ -6,7 +6,7 @@
     <div class="max-w-4xl">
         <div class="mb-4">
             <a href="{{ route('admin.artikel.index') }}"
-                class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors">
+                class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                 </svg>
@@ -19,23 +19,23 @@
             @csrf
 
             @if ($errors->any())
-                <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700">
-                    <p class="text-sm font-semibold text-red-700 dark:text-red-400 mb-2">Gagal menyimpan artikel:</p>
+                <div class="p-4 rounded-xl bg-red-50 border border-red-200">
+                    <p class="text-sm font-semibold text-red-700 mb-2">Gagal menyimpan artikel:</p>
                     <ul class="list-disc pl-5 space-y-1">
                         @foreach ($errors->all() as $error)
-                            <li class="text-xs text-red-600 dark:text-red-400">{{ $error }}</li>
+                            <li class="text-xs text-red-600">{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
 
             {{-- Judul: full-width --}}
-            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-5">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Judul Artikel <span
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">Judul Artikel <span
                         class="text-red-500">*</span></label>
                 <input type="text" name="title" value="{{ old('title') }}"
                     placeholder="Tulis judul artikel yang menarik..."
-                    class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('title') border-red-500 @enderror">
+                    class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 @error('title') border-red-500 @enderror">
                 @error('title')
                     <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                 @enderror
@@ -46,14 +46,14 @@
                 {{-- Kolom kiri: Editor --}}
                 <div class="lg:col-span-2 flex flex-col">
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col flex-1">
+                        class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-1">
                         <div
-                            class="px-4 py-2.5 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Konten Artikel <span
+                            class="px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
+                            <span class="text-sm font-medium text-slate-700">Konten Artikel <span
                                     class="text-red-500">*</span></span>
-                            <span class="text-xs text-gray-400 hidden sm:inline">Mendukung gambar, video, dan link</span>
+                            <span class="text-xs text-slate-400 hidden sm:inline">Mendukung gambar, video, dan link</span>
                         </div>
-                        <div id="quill-editor" class="flex-1 text-gray-800 dark:text-gray-100"></div>
+                        <div id="quill-editor" class="flex-1 text-slate-800"></div>
                         <input type="hidden" name="content" id="quill-content" value="{{ old('content') }}">
                         @error('content')
                             <p class="px-4 pb-3 text-xs text-red-500">{{ $message }}</p>
@@ -66,11 +66,11 @@
 
                     {{-- Ringkasan --}}
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Ringkasan <span
+                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-1.5">Ringkasan <span
                                 class="text-red-500">*</span></label>
                         <textarea name="excerpt" rows="3" placeholder="Ringkasan singkat yang tampil di halaman daftar artikel..."
-                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none @error('excerpt') border-red-500 @enderror">{{ old('excerpt') }}</textarea>
+                            class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 resize-none @error('excerpt') border-red-500 @enderror">{{ old('excerpt') }}</textarea>
                         @error('excerpt')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
@@ -78,15 +78,15 @@
 
                     {{-- Publikasi --}}
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 space-y-3">
-                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Publikasi</h3>
+                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+                        <h3 class="text-sm font-semibold text-slate-700">Publikasi</h3>
                         <div>
-                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Tanggal
+                            <label class="block text-xs font-medium text-slate-500 mb-1.5">Tanggal
                                 Publikasi</label>
                             <input type="datetime-local" name="published_at"
                                 value="{{ old('published_at', now()->format('Y-m-d\TH:i')) }}"
-                                class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                            <p class="mt-1 text-xs text-gray-400">Kosongkan untuk draft.</p>
+                                class="w-full rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                            <p class="mt-1 text-xs text-slate-400">Kosongkan untuk draft.</p>
                         </div>
                         <button type="submit"
                             class="w-full px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white text-sm font-semibold rounded-lg transition-colors">
@@ -96,20 +96,20 @@
 
                     {{-- Gambar Sampul --}}
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 space-y-2.5">
-                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Gambar Sampul</h3>
+                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
+                        <h3 class="text-sm font-semibold text-slate-700">Gambar Sampul</h3>
                         <label
-                            class="flex flex-col items-center justify-center gap-1.5 w-full h-20 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:border-cyan-400 hover:bg-cyan-50/30 dark:hover:bg-cyan-900/10 transition-colors"
+                            class="flex flex-col items-center justify-center gap-1.5 w-full h-20 rounded-lg border-2 border-dashed border-slate-300 cursor-pointer hover:border-cyan-400 hover:bg-cyan-50/30 transition-colors"
                             id="image-drop-area">
-                            <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg class="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
-                            <span class="text-xs text-gray-400" id="image-label">Klik untuk pilih gambar</span>
+                            <span class="text-xs text-slate-400" id="image-label">Klik untuk pilih gambar</span>
                             <input type="file" name="image" id="image-input"
                                 accept="image/jpg,image/jpeg,image/png,image/webp" class="hidden">
                         </label>
-                        <p class="text-xs text-gray-400">JPG, PNG, WebP. Maks 2MB.</p>
+                        <p class="text-xs text-slate-400">JPG, PNG, WebP. Maks 2MB.</p>
                         @error('image')
                             <p class="text-xs text-red-500">{{ $message }}</p>
                         @enderror
@@ -117,10 +117,10 @@
 
                     {{-- Kategori --}}
                     <div
-                        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 space-y-2.5">
-                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Kategori</h3>
+                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
+                        <h3 class="text-sm font-semibold text-slate-700">Kategori</h3>
                         @if ($categories->isEmpty())
-                            <p class="text-xs text-gray-400">Belum ada kategori. <a
+                            <p class="text-xs text-slate-400">Belum ada kategori. <a
                                     href="{{ route('admin.kategori.index') }}" class="text-cyan-500 hover:underline">Tambah
                                     kategori</a>.</p>
                         @else
@@ -129,9 +129,9 @@
                                     <label class="flex items-center gap-2.5 cursor-pointer group">
                                         <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
                                             {{ in_array($cat->id, old('categories', [])) ? 'checked' : '' }}
-                                            class="w-4 h-4 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500">
+                                            class="w-4 h-4 rounded border-slate-300 text-cyan-600 focus:ring-cyan-500">
                                         <span
-                                            class="text-sm text-gray-700 dark:text-gray-300 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">{{ $cat->name }}</span>
+                                            class="text-sm text-slate-700 group-hover:text-cyan-600 transition-colors">{{ $cat->name }}</span>
                                     </label>
                                 @endforeach
                             </div>
@@ -139,7 +139,7 @@
                     </div>
 
                     {{-- Tags --}}
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 space-y-2.5"
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5"
                         x-data="{
                             tags: {{ json_encode(old('tags', [])) }},
                             input: '',
@@ -150,11 +150,11 @@
                             },
                             remove(tag) { this.tags = this.tags.filter(t => t !== tag); }
                         }">
-                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Tags</h3>
+                        <h3 class="text-sm font-semibold text-slate-700">Tags</h3>
                         <div class="flex flex-wrap gap-1.5" x-show="tags.length > 0">
                             <template x-for="tag in tags" :key="tag">
                                 <span
-                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 text-xs font-medium">
+                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-700 text-xs font-medium">
                                     <span x-text="tag"></span>
                                     <button type="button" @click="remove(tag)"
                                         class="hover:text-red-500 leading-none">&times;</button>
@@ -165,13 +165,13 @@
                         <div class="flex gap-2">
                             <input type="text" x-model="input" @keydown.enter.prevent="add()"
                                 @keydown.,.prevent="add()" placeholder="Ketik tag lalu Enter..."
-                                class="flex-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                                class="flex-1 rounded-lg border border-slate-300 bg-white text-slate-800 px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500">
                             <button type="button" @click="add()"
-                                class="px-3 py-1.5 text-xs font-medium bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-lg transition-colors">
+                                class="px-3 py-1.5 text-xs font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors">
                                 Tambah
                             </button>
                         </div>
-                        <p class="text-xs text-gray-400">Pisahkan dengan Enter atau koma.</p>
+                        <p class="text-xs text-slate-400">Pisahkan dengan Enter atau koma.</p>
                         @error('tags.*')
                             <p class="text-xs text-red-500">{{ $message }}</p>
                         @enderror

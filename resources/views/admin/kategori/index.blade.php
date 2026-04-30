@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Kategori Artikel')
 
@@ -10,7 +10,7 @@
             x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4"
             style="position:fixed;top:24px;right:24px;z-index:250;max-width:360px;width:100%;"
-            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200 dark:bg-gray-800 dark:border-red-700' : 'bg-white border-emerald-200 dark:bg-gray-800 dark:border-emerald-700' }}">
+            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200' : 'bg-white border-emerald-200' }}">
             <span
                 class="absolute left-0 top-0 bottom-0 w-1 {{ session('error') ? 'bg-red-500' : 'bg-emerald-500' }}"></span>
             @if (session('error'))
@@ -25,7 +25,7 @@
                 </svg>
             @endif
             <p
-                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300' }}">
+                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700' : 'text-emerald-700' }}">
                 {{ session('error') ?? session('success') }}
             </p>
             <button @click="show = false"
@@ -42,18 +42,18 @@
 
         {{-- Header --}}
         <div x-data
-            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 px-6 py-4 flex items-center justify-between">
+            class="bg-white rounded-xl shadow-sm border border-slate-200 px-6 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg bg-cyan-100 dark:bg-cyan-900/40 flex items-center justify-center">
-                    <svg class="w-5 h-5 text-cyan-600 dark:text-cyan-400" fill="none" viewBox="0 0 24 24"
+                <div class="w-9 h-9 rounded-lg bg-cyan-100 flex items-center justify-center">
+                    <svg class="w-5 h-5 text-cyan-600" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                     </svg>
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-gray-800 dark:text-white">Kategori Artikel</h2>
-                    <p class="text-xs text-gray-400">{{ $categories->total() }} kategori terdaftar</p>
+                    <h2 class="text-base font-semibold text-slate-800">Kategori Artikel</h2>
+                    <p class="text-xs text-slate-400">{{ $categories->total() }} kategori terdaftar</p>
                 </div>
             </div>
             {{-- Add Category Modal Trigger --}}
@@ -70,33 +70,33 @@
 
         {{-- Table --}}
         <div
-            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <table class="w-full text-sm">
                 <thead>
-                    <tr class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
+                    <tr class="border-b border-slate-200 bg-slate-50">
                         <th
-                            class="text-left px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Nama</th>
                         <th
-                            class="text-left px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="text-left px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Slug</th>
                         <th
-                            class="text-center px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="text-center px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Artikel</th>
                         <th
-                            class="text-right px-6 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="text-right px-6 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                <tbody class="divide-y divide-slate-100">
                     @forelse ($categories as $kategori)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors" x-data>
-                            <td class="px-6 py-4 font-medium text-gray-800 dark:text-white">{{ $kategori->name }}</td>
-                            <td class="px-6 py-4 text-gray-400 font-mono text-xs">{{ $kategori->slug }}</td>
+                        <tr class="hover:bg-slate-50 transition-colors" x-data>
+                            <td class="px-6 py-4 font-medium text-slate-800">{{ $kategori->name }}</td>
+                            <td class="px-6 py-4 text-slate-400 font-mono text-xs">{{ $kategori->slug }}</td>
                             <td class="px-6 py-4 text-center">
                                 <span
                                     class="inline-flex items-center justify-center w-7 h-7 text-xs font-bold rounded-full
-                                    {{ $kategori->articles_count > 0 ? 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400' : 'bg-gray-100 text-gray-400 dark:bg-gray-700' }}">
+                                    {{ $kategori->articles_count > 0 ? 'bg-cyan-100 text-cyan-700' : 'bg-slate-100 text-slate-400' }}">
                                     {{ $kategori->articles_count }}
                                 </span>
                             </td>
@@ -105,7 +105,7 @@
                                     @can('kategori.edit')
                                         <button
                                             @click="$dispatch('open-edit-kategori', { id: {{ $kategori->id }}, name: '{{ addslashes($kategori->name) }}' })"
-                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 rounded-lg transition-colors">
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors">
                                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -118,7 +118,7 @@
                                             @submit.prevent="$dispatch('open-confirm', {title: 'Hapus Kategori', message: 'Yakin hapus kategori &quot;{{ addslashes($kategori->name) }}&quot;? Artikel yang terkait tidak akan terhapus.', form: $el, type: 'danger'})">
                                             @csrf @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition-colors">
+                                                class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors">
                                                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
                                                     stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -133,7 +133,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-400">
+                            <td colspan="4" class="px-6 py-12 text-center text-sm text-slate-400">
                                 Belum ada kategori. Tambahkan kategori pertama.
                             </td>
                         </tr>
@@ -144,7 +144,7 @@
 
         @if ($categories->hasPages())
             <div
-                class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 px-6 py-4">
+                class="bg-white rounded-xl shadow-sm border border-slate-200 px-6 py-4">
                 {{ $categories->links() }}
             </div>
         @endif
@@ -156,20 +156,20 @@
         <div x-data="{ show: false }" @open-add-kategori.window="show = true" x-show="show" x-cloak
             class="fixed inset-0 z-[200] flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="show = false"></div>
-            <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6"
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100">
-                <h3 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Tambah Kategori</h3>
+                <h3 class="text-base font-semibold text-slate-800 mb-4">Tambah Kategori</h3>
                 <form method="POST" action="{{ route('admin.kategori.store') }}">
                     @csrf
                     <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Nama Kategori</label>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Nama Kategori</label>
                         <input type="text" name="name" required autofocus placeholder="Contoh: Teknologi"
-                            class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none">
+                            class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none">
                     </div>
                     <div class="flex justify-end gap-3">
                         <button type="button" @click="show = false"
-                            class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                            class="px-4 py-2 text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                             Batal
                         </button>
                         <button type="submit"
@@ -188,20 +188,20 @@
             @open-edit-kategori.window="show = true; id = $event.detail.id; name = $event.detail.name" x-show="show" x-cloak
             class="fixed inset-0 z-[200] flex items-center justify-center p-4">
             <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="show = false"></div>
-            <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm p-6"
+            <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6"
                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95"
                 x-transition:enter-end="opacity-100 scale-100">
-                <h3 class="text-base font-semibold text-gray-800 dark:text-white mb-4">Edit Kategori</h3>
+                <h3 class="text-base font-semibold text-slate-800 mb-4">Edit Kategori</h3>
                 <form method="POST" :action="`/admin/kategori/${id}`">
                     @csrf @method('PUT')
                     <div class="mb-4">
-                        <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">Nama Kategori</label>
+                        <label class="block text-xs font-medium text-slate-600 mb-1.5">Nama Kategori</label>
                         <input type="text" name="name" x-model="name" required
-                            class="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none">
+                            class="w-full px-3 py-2 text-sm rounded-lg border border-slate-300 bg-white text-slate-800 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none">
                     </div>
                     <div class="flex justify-end gap-3">
                         <button type="button" @click="show = false"
-                            class="px-4 py-2 text-sm text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                            class="px-4 py-2 text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                             Batal
                         </button>
                         <button type="submit"

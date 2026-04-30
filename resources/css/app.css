@@ -77,7 +77,7 @@
    — no !important needed.
    ============================================= */
 
-html:not(.dark) body {
+html:not(.dark) body:not(.admin-body) {
     background-color: #d6dde8;
     color: #111827;
 }
@@ -229,4 +229,24 @@ html:not(.dark) footer .text-gray-600 {
 }
 html:not(.dark) footer .text-white {
     color: #111827;
+}
+
+/* =============================================
+   ADMIN PANEL: Undo public light-mode overrides
+   body.admin-body has same specificity (0,2,1) as
+   html:not(.dark) but appears later → wins.
+   ============================================= */
+body.admin-body .text-white {
+    color: #ffffff;
+}
+body.admin-body input,
+body.admin-body select,
+body.admin-body textarea {
+    background-color: #ffffff;
+    border-color: #e2e8f0;
+    color: #1e293b;
+}
+body.admin-body input::placeholder,
+body.admin-body textarea::placeholder {
+    color: #94a3b8;
 }

@@ -1,55 +1,55 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Email Workspace')
 
 @section('content')
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
             <div>
-                <h2 class="text-base font-semibold text-gray-800 dark:text-white">Email Workspace</h2>
-                <p class="text-xs text-gray-400 mt-0.5">Staff yang memiliki akun Google Workspace</p>
+                <h2 class="text-base font-semibold text-slate-800">Email Workspace</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Staff yang memiliki akun Google Workspace</p>
             </div>
-            <a href="{{ route('admin.staff-email.index') }}" class="text-xs text-cyan-600 dark:text-cyan-400 hover:underline">
-                Lihat semua staff →
+            <a href="{{ route('admin.staff-email.index') }}" class="text-xs text-cyan-600 hover:underline">
+                Lihat semua staff â†’
             </a>
         </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <thead class="bg-slate-50">
                     <tr>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Nama</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             PT / Departemen</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Email</th>
                         <th
-                            class="px-6 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Email Workspace</th>
                         <th
-                            class="px-6 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            class="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody class="divide-y divide-slate-200">
                     @forelse ($staffEmails as $staff)
-                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                            <td class="px-6 py-3 font-medium text-gray-800 dark:text-white">{{ $staff->nama }}</td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-6 py-3 font-medium text-slate-800">{{ $staff->nama }}</td>
+                            <td class="px-6 py-3 text-slate-600">
                                 <div>{{ $staff->pt }}</div>
-                                <div class="text-xs text-gray-400">{{ $staff->departemen }}</div>
+                                <div class="text-xs text-slate-400">{{ $staff->departemen }}</div>
                             </td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">
+                            <td class="px-6 py-3 text-slate-600">
                                 <a href="mailto:{{ $staff->email }}"
-                                    class="hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">{{ $staff->email }}</a>
+                                    class="hover:text-cyan-600 transition-colors">{{ $staff->email }}</a>
                             </td>
                             <td class="px-6 py-3">
                                 <a href="mailto:{{ $staff->email_workspace }}"
-                                    class="inline-flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 hover:underline">
+                                    class="inline-flex items-center gap-1.5 text-cyan-600 hover:underline">
                                     <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                                         <path
                                             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -66,7 +66,7 @@
                             <td class="px-6 py-3 text-right">
                                 @can('staff-email.edit')
                                     <a href="{{ route('admin.staff-email.edit', $staff) }}"
-                                        class="px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                                        class="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                                         Edit
                                     </a>
                                 @endcan
@@ -74,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-sm text-gray-400">
+                            <td colspan="5" class="px-6 py-12 text-center text-sm text-slate-400">
                                 Belum ada staff dengan email workspace.
                             </td>
                         </tr>
@@ -84,7 +84,7 @@
         </div>
 
         @if ($staffEmails->hasPages())
-            <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="px-6 py-4 border-t border-slate-200">
                 {{ $staffEmails->links() }}
             </div>
         @endif

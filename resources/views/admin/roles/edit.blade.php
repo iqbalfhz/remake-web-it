@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+﻿@extends('admin.layouts.app')
 
 @section('title', 'Atur Permission: ' . $role->name)
 
@@ -10,7 +10,7 @@
             x-transition:enter-end="opacity-100 translate-x-0" x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-4"
             style="position:fixed;top:24px;right:24px;z-index:250;max-width:360px;width:100%;"
-            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200 dark:bg-gray-800 dark:border-red-700' : 'bg-white border-emerald-200 dark:bg-gray-800 dark:border-emerald-700' }}">
+            class="flex items-center gap-3 pl-4 pr-3 py-3.5 rounded-xl border shadow-xl overflow-hidden {{ session('error') ? 'bg-white border-red-200' : 'bg-white border-emerald-200' }}">
             <span
                 class="absolute left-0 top-0 bottom-0 w-1 {{ session('error') ? 'bg-red-500' : 'bg-emerald-500' }}"></span>
             @if (session('error'))
@@ -25,7 +25,7 @@
                 </svg>
             @endif
             <p
-                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700 dark:text-red-300' : 'text-emerald-700 dark:text-emerald-300' }}">
+                class="text-sm font-medium flex-1 {{ session('error') ? 'text-red-700' : 'text-emerald-700' }}">
                 {{ session('error') ?? session('success') }}
             </p>
             <button @click="show = false"
@@ -40,17 +40,17 @@
     <div class="space-y-6">
 
 
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
                 <div>
-                    <h2 class="text-base font-semibold text-gray-800 dark:text-white">
+                    <h2 class="text-base font-semibold text-slate-800">
                         Atur Permission untuk Role:
-                        <span class="text-cyan-600 dark:text-cyan-400">{{ $role->name }}</span>
+                        <span class="text-cyan-600">{{ $role->name }}</span>
                     </h2>
-                    <p class="text-xs text-gray-400 mt-0.5">Centang permission yang ingin diberikan ke role ini.</p>
+                    <p class="text-xs text-slate-400 mt-0.5">Centang permission yang ingin diberikan ke role ini.</p>
                 </div>
                 <a href="{{ route('admin.roles.index') }}"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                     </svg>
@@ -65,18 +65,18 @@
                     @foreach ($permissions as $module => $modulePermissions)
                         <div>
                             <h3
-                                class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                                class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
                                 {{ $module }}
                             </h3>
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                                 @foreach ($modulePermissions as $permission)
                                     <label
                                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors
-                                              {{ in_array($permission->id, $rolePermissions) ? 'bg-cyan-50 dark:bg-cyan-900/20 border-cyan-300 dark:border-cyan-700' : 'bg-white dark:bg-gray-700/30 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50' }}">
+                                              {{ in_array($permission->id, $rolePermissions) ? 'bg-cyan-50 border-cyan-300' : 'bg-white border-slate-200 hover:bg-slate-50' }}">
                                         <input type="checkbox" name="permissions[]" value="{{ $permission->id }}"
                                             {{ in_array($permission->id, $rolePermissions) ? 'checked' : '' }}
-                                            class="w-4 h-4 rounded text-cyan-600 border-gray-300 dark:border-gray-600 focus:ring-cyan-500">
-                                        <span class="text-sm text-gray-700 dark:text-gray-300">
+                                            class="w-4 h-4 rounded text-cyan-600 border-slate-300 focus:ring-cyan-500">
+                                        <span class="text-sm text-slate-700">
                                             {{ explode('.', $permission->name)[1] ?? $permission->name }}
                                         </span>
                                     </label>
@@ -86,9 +86,9 @@
                     @endforeach
                 </div>
 
-                <div class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+                <div class="px-6 py-4 border-t border-slate-200 flex items-center justify-end gap-3">
                     <a href="{{ route('admin.roles.index') }}"
-                        class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors">
+                        class="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
                         Batal
                     </a>
                     <button type="submit"
