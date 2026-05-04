@@ -35,6 +35,8 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('users.create');
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -46,9 +48,11 @@ class UserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'is_approved' => true,
-            'is_active' => true,
         ]);
+
+        $user->is_approved = true;
+        $user->is_active = true;
+        $user->save();
 
         if (! empty($data['role'])) {
             $user->assignRole($data['role']);
@@ -59,6 +63,8 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
+        $this->authorize('users.edit');
+
         $roles = Role::orderBy('name')->get();
 
         return view('admin.users.edit', compact('user', 'roles'));
@@ -66,6 +72,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $this->authorize('users.edit');
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
@@ -89,6 +97,8 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('users.delete');
+
         $name = $user->name;
         $user->delete();
 
@@ -97,13 +107,18 @@ class UserController extends Controller
 
     public function approve(User $user): RedirectResponse
     {
-        $user->update(['is_approved' => true]);
+        $this->authorize('users.edit');
+
+        $user->is_approved = true;
+        $user->save();
 
         return back()->with('success', "Akun {$user->name} berhasil disetujui.");
     }
 
     public function reject(User $user): RedirectResponse
     {
+        $this->authorize('users.delete');
+
         $name = $user->name;
         $user->delete();
 
@@ -112,13 +127,16 @@ class UserController extends Controller
 
     public function toggle(User $user): RedirectResponse
     {
+        $this->authorize('users.edit');
+
         $actor = Auth::user();
 
         if ($actor->adminTier() >= $user->adminTier()) {
             abort(403, 'Anda tidak memiliki izin untuk mengubah status pengguna ini.');
         }
 
-        $user->update(['is_active' => ! $user->is_active]);
+        $user->is_active = ! $user->is_active;
+        $user->save();
 
         $status = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
 
@@ -127,6 +145,8 @@ class UserController extends Controller
 
     public function assignRole(Request $request, User $user): RedirectResponse
     {
+        $this->authorize('users.edit');
+
         $request->validate([
             'role' => ['nullable', 'string', 'exists:roles,name'],
         ]);

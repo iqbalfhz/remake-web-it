@@ -11,7 +11,31 @@
 
 <body class="font-sans antialiased bg-gray-950">
 
-    <div class="min-h-screen flex" x-data="{ showPassword: false }">
+    <div class="min-h-screen flex" x-data="{
+        showPassword: false,
+        lockUntil: {{ session('lock_until') ?? 0 }},
+        remaining: 0,
+        timer: null,
+        init() {
+            if (this.lockUntil > 0) {
+                this.tick();
+                this.timer = setInterval(() => this.tick(), 1000);
+            }
+        },
+        tick() {
+            const now = Math.floor(Date.now() / 1000);
+            this.remaining = Math.max(0, this.lockUntil - now);
+            if (this.remaining === 0) { clearInterval(this.timer); }
+        },
+        formatTime(s) {
+            if (s >= 60) {
+                const m = Math.floor(s / 60);
+                const sec = s % 60;
+                return sec > 0 ? `${m} mnt ${sec} dtk` : `${m} menit`;
+            }
+            return `${s} detik`;
+        }
+    }">
 
         {{-- Left Panel — Branding --}}
         <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden flex-col items-center justify-center p-12"
@@ -95,15 +119,74 @@
                     </div>
                 @endif
 
+                {{-- ===== LOCKOUT COUNTDOWN ===== --}}
+                @if (session('lock_until'))
+                    <div class="mb-5">
+                        <div class="px-4 py-4 bg-red-50 border border-red-200 rounded-xl">
+                            <div class="flex items-start gap-3">
+                                <div class="shrink-0 mt-0.5 p-1.5 bg-red-100 rounded-lg">
+                                    <svg class="w-4 h-4 text-red-600" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 15v2m0 0v2m0-2h2m-2 0H10m2-9V6m0 0V4m0 2h2M12 6h-2m9.293 9.293a1 1 0 01-1.414 0L12 13.414l-7.879 7.879a1 1 0 01-1.414-1.414L10.586 12 2.707 4.121a1 1 0 011.414-1.414L12 10.586l7.879-7.879a1 1 0 011.414 1.414L13.414 12l7.879 7.879a1 1 0 010 1.414z" />
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm font-semibold text-red-700">Akun sementara diblokir</p>
+                                    <p class="text-xs text-red-600 mt-0.5">Terlalu banyak percobaan login gagal. Harap
+                                        tunggu sebelum mencoba lagi.</p>
+                                    <div x-show="remaining > 0" class="mt-3 flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-red-500 shrink-0 animate-pulse" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span class="text-sm font-bold text-red-700"
+                                            x-text="'Tunggu: ' + formatTime(remaining)"></span>
+                                    </div>
+                                    <div x-show="remaining === 0" class="mt-3">
+                                        <span class="text-sm font-semibold text-green-600">✓ Penalti selesai, Anda bisa
+                                            mencoba lagi.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 {{-- Validation errors --}}
                 @if ($errors->any())
+                    @php $filteredErrors = $errors->all(); @endphp
                     <div class="mb-5 px-4 py-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl">
                         <ul class="space-y-0.5">
-                            @foreach ($errors->all() as $error)
+                            @foreach ($filteredErrors as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
+                @endif
+
+                {{-- ===== ATTEMPTS WARNING ===== --}}
+                @if (session('login_attempts') && !session('lock_until'))
+                    @php
+                        $attempts = session('login_attempts');
+                        $remaining = max(0, 3 - $attempts);
+                    @endphp
+                    @if ($remaining > 0)
+                        <div class="mb-5 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-amber-600 shrink-0" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <p class="text-sm text-amber-700 font-medium">
+                                    Percobaan ke-{{ $attempts }}. Masih tersisa
+                                    <strong>{{ $remaining }} percobaan</strong> sebelum diblokir sementara.
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                 @endif
 
                 <form method="POST" action="{{ route('login') }}" class="space-y-5">
@@ -122,8 +205,8 @@
                                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </span>
-                            <input id="email" type="email" name="email" value="{{ old('email') }}" required
-                                autofocus autocomplete="username"
+                            <input id="email" type="email" name="email" value="{{ old('email') }}"
+                                required autofocus autocomplete="username"
                                 class="w-full pl-10 pr-4 py-2.5 text-sm text-gray-900 bg-gray-50 border rounded-xl transition-all duration-200
                                    focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 focus:bg-white
                                    {{ $errors->get('email') ? 'border-red-400 bg-red-50' : 'border-gray-200' }}"
@@ -186,14 +269,17 @@
                     </div>
 
                     {{-- Submit --}}
-                    <button type="submit"
-                        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-600 hover:bg-cyan-700 active:bg-cyan-800
-                           text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-sm hover:shadow-md hover:shadow-cyan-500/25 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+                    <button type="submit" :disabled="remaining > 0"
+                        :class="remaining > 0 ? 'opacity-50 cursor-not-allowed pointer-events-none' :
+                            'hover:bg-cyan-700 active:bg-cyan-800 hover:shadow-md hover:shadow-cyan-500/25'"
+                        class="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-cyan-600
+                           text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
                         </svg>
-                        Masuk ke Panel Admin
+                        <span x-text="remaining > 0 ? 'Login Diblokir Sementara' : 'Masuk ke Panel Admin'">Masuk ke
+                            Panel Admin</span>
                     </button>
                 </form>
 

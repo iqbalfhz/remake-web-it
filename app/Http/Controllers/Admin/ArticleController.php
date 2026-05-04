@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Mews\Purifier\Facades\Purifier;
 
 class ArticleController extends Controller
 {
@@ -39,6 +40,7 @@ class ArticleController extends Controller
     {
         $this->authorize('artikel.create');
         $data = $request->validated();
+        $data['content'] = Purifier::clean($data['content'], 'quill');
         $data['slug'] = $this->uniqueSlug(Str::slug($data['title']));
         $data['user_id'] = $request->user()->id;
 
@@ -69,6 +71,7 @@ class ArticleController extends Controller
     {
         $this->authorize('artikel.edit');
         $data = $request->validated();
+        $data['content'] = Purifier::clean($data['content'], 'quill');
 
         if (isset($data['title'])) {
             $newSlug = Str::slug($data['title']);

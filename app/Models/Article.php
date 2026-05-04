@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Article extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'user_id',
         'title',
@@ -19,6 +23,15 @@ class Article extends Model
         'image',
         'published_at',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['title', 'slug', 'excerpt', 'published_at', 'user_id'])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges()
+            ->setDescriptionForEvent(fn (string $eventName) => "Artikel {$eventName}");
+    }
 
     protected $casts = [
         'published_at' => 'datetime',

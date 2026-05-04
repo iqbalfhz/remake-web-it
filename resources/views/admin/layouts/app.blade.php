@@ -7,71 +7,120 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin - @yield('title', 'Dashboard') | IT Tangcity</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Apply sidebar state BEFORE render to prevent flash --}}
+    <script>
+        if (localStorage.getItem('sidebar-collapsed') === 'true') document.documentElement.classList.add(
+            'sidebar-collapsed')
+    </script>
 </head>
 
 <body class="admin-body bg-slate-50 font-sans antialiased">
-    <div class="min-h-screen flex">
+    <div class="min-h-screen flex" x-data="{
+        collapsed: localStorage.getItem('sidebar-collapsed') === 'true',
+        ready: false,
+        toggle() {
+            this.collapsed = !this.collapsed;
+            localStorage.setItem('sidebar-collapsed', this.collapsed);
+            document.documentElement.classList.toggle('sidebar-collapsed', this.collapsed);
+        }
+    }" x-init="$nextTick(() => {
+        ready = true;
+        document.documentElement.classList.toggle('sidebar-collapsed', collapsed);
+    })">
 
         {{-- Sidebar --}}
-        <aside class="w-64 bg-slate-800 text-white flex flex-col shrink-0">
-            <div class="h-16 flex items-center px-6 border-b border-slate-700/60">
-                <span class="text-lg font-bold tracking-tight text-white">IT Tangcity</span>
-                <span class="ml-2 text-xs text-cyan-400 font-semibold uppercase tracking-wide">Admin</span>
+        <aside :class="[collapsed ? 'w-16' : 'w-64', ready ? 'transition-all duration-300 ease-in-out' : '']"
+            class="sidebar bg-slate-800 text-white flex flex-col shrink-0">
+            {{-- Header --}}
+            <div class="h-16 flex items-center justify-center px-4 border-b border-slate-700/60 overflow-hidden">
+                {{-- Expanded: full name --}}
+                <div class="flex items-center gap-2 overflow-hidden w-full" x-show="!collapsed"
+                    x-transition:enter="transition duration-200 delay-100" x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100" x-transition:leave="transition duration-100"
+                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+                    <span class="text-lg font-bold tracking-tight text-white whitespace-nowrap">IT Tangcity</span>
+                    <span
+                        class="text-xs text-cyan-400 font-semibold uppercase tracking-wide whitespace-nowrap">Admin</span>
+                </div>
+                {{-- Collapsed: short logo --}}
+                <div x-show="collapsed" x-transition:enter="transition duration-200 delay-100"
+                    x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0">
+                    <span class="text-sm font-bold text-white tracking-widest">IT</span>
+                </div>
             </div>
-            <nav class="flex-1 px-4 py-6 space-y-1">
+            <nav class="flex-1 px-2 py-4 space-y-0.5 overflow-y-auto overflow-x-hidden">
                 {{-- Dashboard --}}
-                <a href="{{ route('admin.dashboard') }}"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                <a href="{{ route('admin.dashboard') }}" :title="collapsed ? 'Dashboard' : ''"
+                    :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                    class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.dashboard') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                     <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
-                    Dashboard
+                    <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0" class="whitespace-nowrap">Dashboard</span>
                 </a>
 
                 @if (Auth::user()->can('artikel.view') || Auth::user()->can('kategori.view') || Auth::user()->can('komentar.view'))
-                    <div class="pt-4 pb-2">
+                    <div class="pt-3 pb-1" x-show="!collapsed">
                         <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Konten</p>
                     </div>
+                    <div x-show="collapsed" class="my-1 border-t border-slate-700/40"></div>
                 @endif
 
                 {{-- Artikel --}}
                 @can('artikel.view')
-                    <a href="{{ route('admin.artikel.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.artikel.index') }}" :title="collapsed ? 'Artikel' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.artikel.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                         </svg>
-                        Artikel
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Artikel</span>
                     </a>
                 @endcan
 
                 {{-- Kategori --}}
                 @can('kategori.view')
-                    <a href="{{ route('admin.kategori.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.kategori.index') }}" :title="collapsed ? 'Kategori' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.kategori.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                         </svg>
-                        Kategori
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Kategori</span>
                     </a>
                 @endcan
 
                 {{-- Komentar --}}
                 @can('komentar.view')
-                    <a href="{{ route('admin.komentar.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.komentar.index') }}" :title="collapsed ? 'Komentar' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.komentar.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
                         </svg>
-                        Komentar
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Komentar</span>
                     </a>
                 @endcan
 
@@ -79,61 +128,81 @@
                         Auth::user()->can('mailing-list.view') ||
                         Auth::user()->can('staff-email.view') ||
                         Auth::user()->can('workspace-email.view'))
-                    <div class="pt-4 pb-2">
+                    <div class="pt-3 pb-1" x-show="!collapsed">
                         <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Komunikasi</p>
                     </div>
+                    <div x-show="collapsed" class="my-1 border-t border-slate-700/40"></div>
                 @endif
 
                 {{-- Pesan Masuk --}}
                 @can('contacts.view')
-                    @php $unreadContactsCount = isset($unreadContacts) ? $unreadContacts->count() : \App\Models\Contact::where('is_read', false)->count(); @endphp
-                    <a href="{{ route('admin.contacts.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    @php $unreadContactsCount = isset($unreadContacts) ? (is_int($unreadContacts) ? $unreadContacts : $unreadContacts->count()) : \App\Models\Contact::where('is_read', false)->count(); @endphp
+                    <a href="{{ route('admin.contacts.index') }}" :title="collapsed ? 'Pesan Masuk' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.contacts.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
-                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                        Pesan Masuk
-                        @if ($unreadContactsCount > 0)
-                            <span
-                                class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                {{ $unreadContactsCount }}
-                            </span>
-                        @endif
+                        <div class="relative shrink-0">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            @if ($unreadContactsCount > 0)
+                                <span x-show="collapsed"
+                                    class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            @endif
+                        </div>
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap flex-1 flex items-center">
+                            Pesan Masuk
+                            @if ($unreadContactsCount > 0)
+                                <span
+                                    class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">{{ $unreadContactsCount }}</span>
+                            @endif
+                        </span>
                     </a>
                 @endcan
 
                 {{-- Mailing List --}}
                 @can('mailing-list.view')
-                    <a href="{{ route('admin.mailing-list.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.mailing-list.index') }}" :title="collapsed ? 'Mailing List' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.mailing-list.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        Mailing List
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Mailing List</span>
                     </a>
                 @endcan
 
                 {{-- Email Staff --}}
                 @can('staff-email.view')
-                    <a href="{{ route('admin.staff-email.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.staff-email.index') }}" :title="collapsed ? 'Email Staff' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.staff-email.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
                         </svg>
-                        Email Staff
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Email Staff</span>
                     </a>
                 @endcan
 
                 {{-- Email Workspace --}}
                 @can('workspace-email.view')
-                    <a href="{{ route('admin.workspace-email') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.workspace-email') }}" :title="collapsed ? 'Email Workspace' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.workspace-email') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                             <path
@@ -145,82 +214,145 @@
                             <path
                                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                         </svg>
-                        Email Workspace
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Email Workspace</span>
                     </a>
                 @endcan
 
                 @if (Auth::user()->can('users.view') || Auth::user()->can('roles.view') || Auth::user()->can('permissions.view'))
-                    <div class="pt-4 pb-2">
+                    <div class="pt-3 pb-1" x-show="!collapsed">
                         <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Sistem</p>
                     </div>
+                    <div x-show="collapsed" class="my-1 border-t border-slate-700/40"></div>
                 @endif
 
                 {{-- Pengguna --}}
                 @can('users.view')
-                    <a href="{{ route('admin.users.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.users.index') }}" :title="collapsed ? 'Pengguna' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.users.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
-                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                        Pengguna
-                        @php $pendingCount = \App\Models\User::where('is_approved', false)->where('is_admin', false)->count(); @endphp
-                        @if ($pendingCount > 0)
-                            <span
-                                class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-                                {{ $pendingCount }}
-                            </span>
-                        @endif
+                        <div class="relative shrink-0">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            @php $pendingCount = \App\Models\User::where('is_approved', false)->where('is_admin', false)->count(); @endphp
+                            @if ($pendingCount > 0)
+                                <span x-show="collapsed"
+                                    class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                            @endif
+                        </div>
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap flex-1 flex items-center">
+                            Pengguna
+                            @if ($pendingCount > 0)
+                                <span
+                                    class="ml-auto inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">{{ $pendingCount }}</span>
+                            @endif
+                        </span>
                     </a>
                 @endcan
 
                 {{-- Roles --}}
                 @can('roles.view')
-                    <a href="{{ route('admin.roles.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.roles.index') }}" :title="collapsed ? 'Role' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.roles.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
-                        Role
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Role</span>
                     </a>
                 @endcan
 
                 {{-- Permissions --}}
                 @can('permissions.view')
-                    <a href="{{ route('admin.permissions.index') }}"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                    <a href="{{ route('admin.permissions.index') }}" :title="collapsed ? 'Permission' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
                           {{ request()->routeIs('admin.permissions.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
                         <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                         </svg>
-                        Permission
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Permission</span>
+                    </a>
+                @endcan
+
+                {{-- Blokir Login --}}
+                <a href="{{ route('admin.login-attempts.index') }}" :title="collapsed ? 'Blokir Login' : ''"
+                    :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                    class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                      {{ request()->routeIs('admin.login-attempts.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
+                    <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0" class="whitespace-nowrap">Blokir Login</span>
+                </a>
+
+                {{-- Log Aktivitas --}}
+                @can('logs.view')
+                    <a href="{{ route('admin.activity-log.index') }}" :title="collapsed ? 'Log Aktivitas' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="flex items-center gap-3 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                          {{ request()->routeIs('admin.activity-log.*') ? 'bg-cyan-600 text-white shadow-sm' : 'text-slate-300 hover:bg-slate-700 hover:text-white' }}">
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Log Aktivitas</span>
                     </a>
                 @endcan
             </nav>
-            <div class="px-4 py-4 border-t border-slate-700/60">
-                <div class="flex items-center gap-3 px-3 py-2">
+            <div class="px-2 py-3 border-t border-slate-700/60">
+                <a href="{{ route('profile.edit') }}" :title="collapsed ? 'Profil' : ''"
+                    :class="collapsed ? 'justify-center' : ''"
+                    class="flex items-center gap-3 px-2 py-2 rounded-lg overflow-hidden hover:bg-slate-700 transition-colors group">
                     <div
-                        class="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center text-sm font-bold shrink-0">
+                        class="w-8 h-8 rounded-full bg-cyan-600 flex items-center justify-center text-sm font-bold shrink-0 group-hover:bg-cyan-500 transition-colors">
                         {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
-                    <div class="flex-1 min-w-0">
+                    <div class="flex-1 min-w-0 overflow-hidden" x-show="!collapsed"
+                        x-transition:enter="transition duration-150 delay-100" x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100" x-transition:leave="transition duration-100"
+                        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
                         <div class="text-sm font-medium text-white truncate">{{ Auth::user()->name }}</div>
                         <div class="text-xs text-slate-400 truncate">{{ Auth::user()->email }}</div>
                     </div>
-                </div>
+                </a>
                 <form method="POST" action="{{ route('logout') }}" class="mt-1">
                     @csrf
-                    <button type="submit"
-                        class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <button type="submit" :title="collapsed ? 'Logout' : ''"
+                        :class="collapsed ? 'justify-center px-0' : 'px-3'"
+                        class="w-full flex items-center gap-3 py-2 rounded-lg text-sm text-slate-400 hover:bg-slate-700 hover:text-white transition-colors">
+                        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
-                        Logout
+                        <span x-show="!collapsed" x-transition:enter="transition duration-150 delay-100"
+                            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+                            x-transition:leave="transition duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" class="whitespace-nowrap">Logout</span>
                     </button>
                 </form>
             </div>
@@ -235,14 +367,24 @@
                     ->latest()
                     ->get();
                 // Use controller-passed $unreadContacts (pre-mark snapshot) if available
-                if (!isset($unreadContacts)) {
+                if (!isset($unreadContacts) || is_int($unreadContacts)) {
                     $unreadContacts = \App\Models\Contact::where('is_read', false)->latest()->get();
                 }
                 $unreadComments = \App\Models\Comment::where('is_read', false)->with('article')->latest()->get();
                 $totalNotifications = $pendingUsers->count() + $unreadContacts->count() + $unreadComments->count();
             @endphp
             <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shadow-sm">
-                <h1 class="text-lg font-semibold text-slate-800">@yield('title', 'Dashboard')</h1>
+                <div class="flex items-center gap-3">
+                    <button @click="toggle()"
+                        class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors"
+                        :title="collapsed ? 'Buka Sidebar' : 'Tutup Sidebar'">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <h1 class="text-lg font-semibold text-slate-800">@yield('title', 'Dashboard')</h1>
+                </div>
 
                 {{-- Notification Bell --}}
                 <div class="relative" x-data="{ open: false }" @click.outside="open = false">

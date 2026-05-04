@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LoginAttemptController;
 use App\Http\Controllers\Admin\MailingListController as AdminMailingListController;
 use App\Http\Controllers\Admin\PermissionController as AdminPermissionController;
 use App\Http\Controllers\Admin\RoleController as AdminRoleController;
@@ -14,15 +16,16 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::post('/contact', [HomeController::class, 'contact'])->name('contact.store');
+Route::post('/contact', [HomeController::class, 'contact'])->middleware('throttle:3,1')->name('contact.store');
 
 Route::prefix('artikel')->name('artikel.')->group(function () {
     Route::get('/', [ArticleController::class, 'index'])->name('index');
     Route::get('/{artikel:slug}', [ArticleController::class, 'show'])->name('show');
-    Route::post('/{artikel:slug}/komentar', [CommentController::class, 'store'])->name('komentar.store');
+    Route::post('/{artikel:slug}/komentar', [CommentController::class, 'store'])->middleware('throttle:5,1')->name('komentar.store');
 });
 
 Route::prefix('daftar-email')->name('email.')->group(function () {
@@ -60,4 +63,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     Route::resource('roles', AdminRoleController::class)->only(['index', 'store', 'edit', 'update', 'destroy']);
     Route::resource('permissions', AdminPermissionController::class)->only(['index', 'store', 'destroy']);
+
+    Route::get('login-attempts', [LoginAttemptController::class, 'index'])->name('login-attempts.index');
+    Route::post('login-attempts/unblock', [LoginAttemptController::class, 'unblock'])->name('login-attempts.unblock');
+
+    Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
+});
+
+// Admin profile — URL /admin/profile, nama route tetap profile.edit / profile.update / profile.destroy
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });

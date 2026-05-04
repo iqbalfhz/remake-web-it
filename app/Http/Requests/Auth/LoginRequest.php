@@ -2,29 +2,20 @@
 
 namespace App\Http\Requests\Auth;
 
-use Illuminate\Auth\Events\Lockout;
-use Illuminate\Contracts\Validation\ValidationRule;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -33,27 +24,30 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws ValidationException
-     */
     public function authenticate(): void
     {
-        $this->ensureIsNotRateLimited();
+        $email = Str::lower($this->string('email'));
+
+        $userExists = User::where('email', $email)->exists();
+
+        if (! $userExists) {
+            throw ValidationException::withMessages([
+                'email' => 'Email tidak terdaftar dalam sistem.',
+            ]);
+        }
+
+        $this->ensureIsNotRateLimited($email);
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            RateLimiter::hit($this->throttleKey());
+            $this->recordFailedAttempt($email);
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'email' => 'Password yang Anda masukkan salah.',
             ]);
         }
 
         if (! Auth::user()->is_approved) {
             Auth::logout();
-
-            RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => 'Akun Anda belum disetujui oleh admin. Silakan tunggu konfirmasi.',
@@ -63,42 +57,112 @@ class LoginRequest extends FormRequest
         if (! Auth::user()->is_active) {
             Auth::logout();
 
-            RateLimiter::hit($this->throttleKey());
-
             throw ValidationException::withMessages([
                 'email' => 'Akun Anda telah dinonaktifkan. Hubungi admin untuk informasi lebih lanjut.',
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        $this->clearAttempts($email);
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws ValidationException
-     */
-    public function ensureIsNotRateLimited(): void
+    public function ensureIsNotRateLimited(string $email): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        $lockUntil = Cache::get($this->lockKey($email));
+
+        if (! $lockUntil) {
             return;
         }
 
-        event(new Lockout($this));
+        $seconds = $lockUntil - now()->timestamp;
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
+        if ($seconds <= 0) {
+            Cache::forget($this->lockKey($email));
+            $this->removeFromRegistry($email);
+
+            return;
+        }
+
+        session()->flash('lock_until', $lockUntil);
+        session()->flash('lock_seconds', $seconds);
+        session()->flash('login_attempts', (int) Cache::get($this->attemptsKey($email), 0));
+
+        $timeMsg = $seconds < 60 ? "{$seconds} detik" : ceil($seconds / 60).' menit';
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => "Akun ini sedang diblokir sementara. Coba lagi dalam {$timeMsg}.",
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
+    private function recordFailedAttempt(string $email): void
+    {
+        $attempts = (int) Cache::get($this->attemptsKey($email), 0) + 1;
+        Cache::put($this->attemptsKey($email), $attempts, now()->addDay());
+
+        session()->flash('login_attempts', $attempts);
+
+        if ($attempts >= 3) {
+            $penalty = $this->penaltySeconds($attempts);
+            $lockUntil = now()->addSeconds($penalty)->timestamp;
+
+            Cache::put($this->lockKey($email), $lockUntil, $penalty);
+            $this->addToRegistry($email, $lockUntil, $attempts);
+
+            session()->flash('lock_until', $lockUntil);
+            session()->flash('lock_seconds', $penalty);
+        }
+    }
+
+    private function clearAttempts(string $email): void
+    {
+        Cache::forget($this->attemptsKey($email));
+        Cache::forget($this->lockKey($email));
+        $this->removeFromRegistry($email);
+    }
+
+    private function addToRegistry(string $email, int $lockUntil, int $attempts): void
+    {
+        $registry = Cache::get('login_blocked_registry', []);
+        $registry[$email] = [
+            'lock_until' => $lockUntil,
+            'attempts' => $attempts,
+            'ip' => $this->ip(),
+        ];
+        Cache::put('login_blocked_registry', $registry, now()->addDay());
+    }
+
+    private function removeFromRegistry(string $email): void
+    {
+        $registry = Cache::get('login_blocked_registry', []);
+        unset($registry[$email]);
+        if (empty($registry)) {
+            Cache::forget('login_blocked_registry');
+        } else {
+            Cache::put('login_blocked_registry', $registry, now()->addDay());
+        }
+    }
+
+    private function penaltySeconds(int $attempts): int
+    {
+        return match (true) {
+            $attempts >= 8 => 600,
+            $attempts >= 7 => 300,
+            $attempts >= 6 => 120,
+            $attempts >= 5 => 90,
+            $attempts >= 4 => 60,
+            default => 30,
+        };
+    }
+
+    private function attemptsKey(string $email): string
+    {
+        return 'login_fails:'.$email;
+    }
+
+    private function lockKey(string $email): string
+    {
+        return 'login_locked:'.$email;
+    }
+
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());

@@ -250,3 +250,29 @@ body.admin-body input::placeholder,
 body.admin-body textarea::placeholder {
     color: #94a3b8;
 }
+
+/* =============================================
+   ADMIN SIDEBAR: No-flash initial state
+   Set via inline script before Alpine loads
+   ============================================= */
+html.sidebar-collapsed aside.sidebar {
+    width: 4rem; /* w-16 */
+}
+
+/* Hide text spans in nav links before Alpine initializes */
+html.sidebar-collapsed aside.sidebar [x-show]:not([x-show="collapsed"]) {
+    display: none !important;
+}
+
+/* Show the collapsed logo when sidebar is collapsed */
+html.sidebar-collapsed aside.sidebar [x-show="collapsed"] {
+    display: block !important;
+}
+
+/* Ensure nav links center their content while collapsed */
+html.sidebar-collapsed aside.sidebar nav a,
+html.sidebar-collapsed aside.sidebar nav button {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+}
