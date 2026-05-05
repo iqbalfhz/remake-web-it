@@ -25,10 +25,8 @@
         -Server
     }
 
-    # Serve PHP via FrankenPHP worker mode for maximum performance
-    php_server {
-        worker /app/public/index.php
-    }
+    # Serve PHP via FrankenPHP (standard mode)
+    php_server
 
     # Logging to stderr so Docker/Coolify can collect it
     log {
