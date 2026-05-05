@@ -29,7 +29,7 @@ return [
             'HTML.DefinitionRev' => 1,
             'CSS.AllowedProperties' => 'color,background-color,text-align,font-size,font-weight,'.
                 'font-style,text-decoration,padding-left,margin-left,'.
-                'white-space,word-break',
+                'white-space',
             'Attr.AllowedFrameTargets' => ['_blank'],
             'Attr.AllowedRel' => 'noopener noreferrer',
             'AutoFormat.RemoveEmpty' => true,
