@@ -50,12 +50,15 @@ COPY . .
 # Copy built frontend assets from stage 1
 COPY --from=assets /app/public/build ./public/build
 
+# Create required directories and set permissions BEFORE composer scripts run
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    storage/logs \
+    bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
 # Run composer post-install scripts
 RUN composer dump-autoload --optimize
-
-# Set correct permissions for Laravel writable directories
-RUN chown -R www-data:www-data storage bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache
 
 # Copy and set entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
