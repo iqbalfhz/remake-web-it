@@ -14,7 +14,7 @@ RUN npm run build
 # =============================================================================
 # Stage 2: FrankenPHP production image
 # =============================================================================
-FROM dunglas/frankenphp:latest-php8.4-alpine
+FROM dunglas/frankenphp:php8.4-alpine
 
 LABEL maintainer="IT Tangcity"
 
