@@ -3,7 +3,7 @@
 @section('title', 'Tambah Artikel')
 
 @section('content')
-    <div class="max-w-4xl">
+    <div class="w-full">
         <div class="mb-4">
             <a href="{{ route('admin.artikel.index') }}"
                 class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
@@ -45,10 +45,8 @@
 
                 {{-- Kolom kiri: Editor --}}
                 <div class="lg:col-span-2 flex flex-col">
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-1">
-                        <div
-                            class="px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col flex-1">
+                        <div class="px-4 py-2.5 border-b border-slate-200 flex items-center justify-between">
                             <span class="text-sm font-medium text-slate-700">Konten Artikel <span
                                     class="text-red-500">*</span></span>
                             <span class="text-xs text-slate-400 hidden sm:inline">Mendukung gambar, video, dan link</span>
@@ -65,8 +63,7 @@
                 <div class="space-y-4">
 
                     {{-- Ringkasan --}}
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
                         <label class="block text-sm font-medium text-slate-700 mb-1.5">Ringkasan <span
                                 class="text-red-500">*</span></label>
                         <textarea name="excerpt" rows="3" placeholder="Ringkasan singkat yang tampil di halaman daftar artikel..."
@@ -77,8 +74,7 @@
                     </div>
 
                     {{-- Publikasi --}}
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
                         <h3 class="text-sm font-semibold text-slate-700">Publikasi</h3>
                         <div>
                             <label class="block text-xs font-medium text-slate-500 mb-1.5">Tanggal
@@ -95,8 +91,7 @@
                     </div>
 
                     {{-- Gambar Sampul --}}
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
                         <h3 class="text-sm font-semibold text-slate-700">Gambar Sampul</h3>
                         <label
                             class="flex flex-col items-center justify-center gap-1.5 w-full h-20 rounded-lg border-2 border-dashed border-slate-300 cursor-pointer hover:border-cyan-400 hover:bg-cyan-50/30 transition-colors"
@@ -116,8 +111,7 @@
                     </div>
 
                     {{-- Kategori --}}
-                    <div
-                        class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2.5">
                         <h3 class="text-sm font-semibold text-slate-700">Kategori</h3>
                         @if ($categories->isEmpty())
                             <p class="text-xs text-slate-400">Belum ada kategori. <a

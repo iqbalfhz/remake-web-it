@@ -17,20 +17,39 @@
 <body class="admin-body bg-slate-50 font-sans antialiased">
     <div class="min-h-screen flex" x-data="{
         collapsed: localStorage.getItem('sidebar-collapsed') === 'true',
+        mobileOpen: false,
         ready: false,
         toggle() {
-            this.collapsed = !this.collapsed;
-            localStorage.setItem('sidebar-collapsed', this.collapsed);
-            document.documentElement.classList.toggle('sidebar-collapsed', this.collapsed);
+            if (window.innerWidth < 768) {
+                this.mobileOpen = !this.mobileOpen;
+            } else {
+                this.collapsed = !this.collapsed;
+                localStorage.setItem('sidebar-collapsed', this.collapsed);
+                document.documentElement.classList.toggle('sidebar-collapsed', this.collapsed);
+            }
         }
     }" x-init="$nextTick(() => {
         ready = true;
         document.documentElement.classList.toggle('sidebar-collapsed', collapsed);
     })">
 
+        {{-- Mobile backdrop overlay --}}
+        <div x-show="mobileOpen" x-cloak @click="mobileOpen = false" class="fixed inset-0 bg-black/60 z-30 md:hidden"
+            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
+
         {{-- Sidebar --}}
-        <aside :class="[collapsed ? 'w-16' : 'w-64', ready ? 'transition-all duration-300 ease-in-out' : '']"
-            class="sidebar bg-slate-800 text-white flex flex-col shrink-0">
+        <aside
+            class="sidebar bg-slate-800 text-white flex flex-col shrink-0
+                      fixed inset-y-0 left-0 z-40 w-64
+                      md:relative md:inset-auto md:z-auto md:translate-x-0
+                      transition-all duration-300 ease-in-out"
+            :class="{
+                '-translate-x-full': !mobileOpen,
+                'md:w-16': collapsed,
+                'md:w-64': !collapsed,
+            }">
             {{-- Header --}}
             <div class="h-16 flex items-center justify-center px-4 border-b border-slate-700/60 overflow-hidden">
                 {{-- Expanded: full name --}}
