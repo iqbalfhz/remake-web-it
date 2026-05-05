@@ -1,0 +1,39 @@
+{
+    # FrankenPHP server options
+    frankenphp
+
+    # Disable admin API in production
+    admin off
+
+    # Ordering — php_server must run before file_server
+    order php_server before file_server
+}
+
+:80 {
+    # Document root
+    root * /app/public
+
+    # Enable compression (zstd, brotli, gzip)
+    encode zstd br gzip
+
+    # Security headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        X-XSS-Protection "1; mode=block"
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+
+    # Serve PHP via FrankenPHP worker mode for maximum performance
+    php_server {
+        worker /app/public/index.php
+    }
+
+    # Logging to stderr so Docker/Coolify can collect it
+    log {
+        output stderr
+        format console
+        level WARN
+    }
+}
