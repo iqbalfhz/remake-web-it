@@ -1,6 +1,15 @@
 #!/bin/sh
 set -e
 
+echo "==> Ensuring storage directories exist..."
+mkdir -p storage/framework/sessions \
+    storage/framework/views \
+    storage/framework/cache \
+    storage/logs \
+    bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
 echo "==> Caching Laravel configuration..."
 php artisan config:cache
 php artisan route:cache
