@@ -33,6 +33,4 @@ phpunit.xml
 .styleci.yml
 phpstan.neon
 
-docker-entrypoint.sh
-Dockerfile
 docker-compose*.yml
