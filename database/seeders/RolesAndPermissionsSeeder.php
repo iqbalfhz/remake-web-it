@@ -30,6 +30,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'users.view', 'users.create', 'users.edit', 'users.delete',
             'roles.view', 'roles.manage',
             'permissions.view', 'permissions.manage',
+            'login-attempts.view',
             'logs.view',
         ];
 
@@ -63,7 +64,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Admin: semua kecuali users.* dan roles/permissions management
         $admin = Role::firstOrCreate(['name' => 'admin']);
-        $admin->syncPermissions(array_filter($permissions, fn ($p) => ! str_starts_with($p, 'users.') && ! str_starts_with($p, 'roles.') && ! str_starts_with($p, 'permissions.') || $p === 'logs.view'));
+        $admin->syncPermissions(array_filter($permissions, fn ($p) => ! str_starts_with($p, 'users.') && ! str_starts_with($p, 'roles.') && ! str_starts_with($p, 'permissions.') || in_array($p, ['logs.view', 'login-attempts.view'])));
 
         // Super Admin: semua permissions
         $superAdmin = Role::firstOrCreate(['name' => 'super-admin']);

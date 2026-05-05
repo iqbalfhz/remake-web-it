@@ -144,6 +144,7 @@
                                         'created' => ['bg-emerald-100', 'text-emerald-700', 'Dibuat'],
                                         'updated' => ['bg-blue-100', 'text-blue-700', 'Diperbarui'],
                                         'deleted' => ['bg-red-100', 'text-red-700', 'Dihapus'],
+                                        'failed' => ['bg-red-100', 'text-red-700', 'Gagal'],
                                         default => [
                                             'bg-slate-100',
                                             'text-slate-600',
@@ -212,10 +213,10 @@
                                     </td>
                                     <td class="px-4 py-3">
                                         @php
-                                            $old = $log->properties['old'] ?? [];
-                                            $attributes = $log->properties['attributes'] ?? [];
+                                            $old = $log->attribute_changes['old'] ?? [];
+                                            $attributes = $log->attribute_changes['attributes'] ?? [];
                                             $hasChanges = !empty($old) || !empty($attributes);
-                                            $extraProps = collect($log->properties->toArray())->except([
+                                            $extraProps = collect($log->properties?->toArray() ?? [])->except([
                                                 'old',
                                                 'attributes',
                                                 'ip',

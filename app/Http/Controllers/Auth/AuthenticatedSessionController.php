@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -24,7 +27,27 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $email = Str::lower($request->string('email'));
+
+        try {
+            $request->authenticate();
+        } catch (ValidationException $e) {
+            $user = User::where('email', $email)->first();
+            $message = collect($e->errors())->flatten()->first() ?? 'Login gagal';
+
+            activity('auth')
+                ->causedBy($user)
+                ->withProperties([
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'email' => $email,
+                    'reason' => $message,
+                ])
+                ->event('failed')
+                ->log('Login Gagal');
+
+            throw $e;
+        }
 
         $request->session()->regenerate();
 

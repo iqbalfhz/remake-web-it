@@ -12,6 +12,8 @@ class LoginAttemptController extends Controller
 {
     public function index(): View
     {
+        $this->authorize('login-attempts.view');
+
         $registry = Cache::get('login_blocked_registry', []);
         $now = now()->timestamp;
 
