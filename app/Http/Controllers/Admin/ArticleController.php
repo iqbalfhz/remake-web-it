@@ -40,7 +40,7 @@ class ArticleController extends Controller
     {
         $this->authorize('artikel.create');
         $data = $request->validated();
-        $data['content'] = Purifier::clean($data['content'], 'quill');
+        $data['content'] = $this->cleanContent($data['content']);
         $data['slug'] = $this->uniqueSlug(Str::slug($data['title']));
         $data['user_id'] = $request->user()->id;
 
@@ -71,7 +71,7 @@ class ArticleController extends Controller
     {
         $this->authorize('artikel.edit');
         $data = $request->validated();
-        $data['content'] = Purifier::clean($data['content'], 'quill');
+        $data['content'] = $this->cleanContent($data['content']);
 
         if (isset($data['title'])) {
             $newSlug = Str::slug($data['title']);
@@ -148,5 +148,19 @@ class ArticleController extends Controller
         }
 
         return $slug;
+    }
+
+    /**
+     * Clean HTML content using HTMLPurifier, converting unsupported HTML5
+     * elements (figure, figcaption) to div equivalents first.
+     */
+    private function cleanContent(string $content): string
+    {
+        $content = preg_replace('/<figure([^>]*)>/', '<div$1>', $content);
+        $content = preg_replace('/<\/figure>/', '</div>', $content);
+        $content = preg_replace('/<figcaption([^>]*)>/', '<div$1>', $content);
+        $content = preg_replace('/<\/figcaption>/', '</div>', $content);
+
+        return Purifier::clean($content, 'quill');
     }
 }
